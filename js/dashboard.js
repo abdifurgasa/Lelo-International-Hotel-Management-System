@@ -1,30 +1,43 @@
 import { auth } from "./firebase.js";
 
-import { signOut,onAuthStateChanged }
+import {
+onAuthStateChanged,
+signOut
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
+// Login Protection
 onAuthStateChanged(auth,(user)=>{
-
 if(!user){
-
 window.location.href="index.html";
-
 }
-
 });
 
+
+// Logout
 document.getElementById("logout").onclick=()=>{
 
-signOut(auth);
+signOut(auth).then(()=>{
+window.location.href="index.html";
+});
 
 };
 
-function loadPage(page){
 
-document.getElementById("content").innerHTML = 
-"<h2>"+page+" module coming soon</h2>";
+// Example Chart
+const ctx = document.getElementById("chart");
+
+if(ctx){
+
+new Chart(ctx,{
+type:"line",
+data:{
+labels:["Mon","Tue","Wed","Thu","Fri"],
+datasets:[{
+label:"Revenue",
+data:[200,300,400,350,500]
+}]
+}
+});
 
 }
-
-window.loadPage = loadPage;
