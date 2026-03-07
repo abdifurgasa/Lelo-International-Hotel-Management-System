@@ -1,0 +1,20 @@
+export const om = {
+
+hotelName: "Hoteela Intarnaashinaalii Leelloo",
+
+loginTitle: "Sirna Bulchiinsa Hoteelaa",
+email: "Imeelii",
+password: "Jecha Darbii/Icciitii",
+login: "Seeni",
+
+dashboard: "Daashboordii",
+rooms: "Kutaa Ciisichaa",
+booking: "Boqonnaa / Booking",
+food: "Nyaata",
+drink: "Dhugaatii",
+billing: "Herrega",
+finance: "Faayinaansii",
+
+logout: "Ba'i"
+
+};
