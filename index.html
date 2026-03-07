@@ -1,239 +1,31 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<title>Hotel ERP</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<style>
+<title>Lelo International Hotel Management System</title>
 
-body{
-margin:0;
-font-family:Arial;
-background:#0f172a;
-color:white;
-}
-
-button{
-padding:10px;
-margin:5px;
-width:200px;
-cursor:pointer;
-}
-
-input{
-padding:8px;
-margin:5px;
-width:200px;
-}
-
-</style>
+<link rel="stylesheet" href="css/style.css">
 
 </head>
 
 <body>
 
-<div id="app"></div>
+<div class="login-container">
 
-<script>
+<h1>Lelo International Hotel</h1>
+<h3>Hotel Management System</h3>
 
-/* ===== START SYSTEM ===== */
+<input type="email" id="email" placeholder="Enter Email">
 
-window.onload=function(){
-startSystem();
-};
+<input type="password" id="password" placeholder="Enter Password">
 
-function startSystem(){
-checkLogin();
-}
-
-/* ===== LOGIN ===== */
-
-function loadLogin(){
-
-document.getElementById("app").innerHTML=`
-<div style="height:100vh;display:flex;justify-content:center;align-items:center">
-
-<div style="background:white;color:black;padding:30px;border-radius:10px;text-align:center">
-
-<h2>Hotel ERP Login</h2>
-
-<input id="username" placeholder="Username"><br>
-<input id="password" type="password" placeholder="Password"><br>
-
-<button onclick="login()" style="background:#22c55e;color:white">
-Login
-</button>
-
-</div>
-</div>
-`;
-}
-
-function login(){
-
-let u=document.getElementById("username").value;
-let p=document.getElementById("password").value;
-
-if(u==="admin" && p==="1234"){
-localStorage.setItem("login","ok");
-loadDashboard();
-}else{
-alert("Wrong login");
-}
-
-}
-
-function checkLogin(){
-
-if(localStorage.getItem("login")==="ok"){
-loadDashboard();
-}else{
-loadLogin();
-}
-
-}
-
-function logout(){
-localStorage.clear();
-loadLogin();
-}
-
-/* ===== DASHBOARD ===== */
-
-function loadDashboard(){
-
-document.getElementById("app").innerHTML=`
-
-<div style="display:flex;height:100vh">
-
-<div style="width:250px;background:#020617;padding:20px">
-
-<h2>🏨 Hotel ERP</h2>
-
-<button onclick="loadRoomPage()">Room Management</button>
-
-<button onclick="logout()" style="background:red;color:white">
-Logout
-</button>
+<button id="loginBtn">Login</button>
 
 </div>
 
-<div id="content" style="flex:1;padding:30px;background:#0f172a">
-<h2>Dashboard Working ✅</h2>
-</div>
-
-</div>
-
-`;
-
-}
-
-/* ===== ROOM SYSTEM ===== */
-
-let rooms = JSON.parse(localStorage.getItem("rooms")||"[]");
-
-function saveRooms(){
-localStorage.setItem("rooms",JSON.stringify(rooms));
-}
-
-function loadRoomPage(){
-
-document.getElementById("content").innerHTML=`
-
-<h2>Room Management</h2>
-
-<input id="roomType" placeholder="Room Type"><br>
-<input id="roomPrice" placeholder="Price" type="number"><br>
-
-<button onclick="addRoom()" style="background:#22c55e;color:white">
-Add Room
-</button>
-
-<div id="roomList"></div>
-
-`;
-
-loadRooms();
-}
-
-function addRoom(){
-
-let type=document.getElementById("roomType").value;
-let price=document.getElementById("roomPrice").value;
-
-if(!type || !price){
-alert("Fill data");
-return;
-}
-
-rooms.push({
-id:Date.now(),
-type,
-price,
-status:"Available"
-});
-
-saveRooms();
-loadRooms();
-}
-
-function loadRooms(){
-
-let list=document.getElementById("roomList");
-if(!list) return;
-
-rooms = JSON.parse(localStorage.getItem("rooms")||"[]");
-
-list.innerHTML="";
-
-rooms.forEach(r=>{
-
-list.innerHTML+=`
-<div style="background:white;color:black;padding:10px;margin:10px;width:220px">
-
-${r.type}<br>
-Price: ${r.price}<br>
-Status: ${r.status}
-
-<br>
-
-<button onclick="toggleRoom(${r.id})" style="background:blue;color:white">
-Toggle
-</button>
-
-<button onclick="deleteRoom(${r.id})" style="background:red;color:white">
-Delete
-</button>
-
-</div>
-`;
-
-});
-
-}
-
-function toggleRoom(id){
-
-rooms=rooms.map(r=>{
-if(r.id===id){
-r.status=r.status==="Available"?"Booked":"Available";
-}
-return r;
-});
-
-saveRooms();
-loadRooms();
-}
-
-function deleteRoom(id){
-
-rooms=rooms.filter(r=>r.id!==id);
-
-saveRooms();
-loadRooms();
-}
-
-</script>
+<script type="module" src="js/auth.js"></script>
 
 </body>
+
 </html>
