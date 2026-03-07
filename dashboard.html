@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Lelo International Hotel Management System</title>
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<div class="sidebar">
+
+<h2>Lelo Hotel</h2>
+
+<ul>
+
+<li onclick="loadPage('home')">Dashboard</li>
+
+<li onclick="loadPage('rooms')">Rooms</li>
+
+<li onclick="loadPage('booking')">Bookings</li>
+
+<li onclick="loadPage('food')">Food Orders</li>
+
+<li onclick="loadPage('drinks')">Drink Orders</li>
+
+<li onclick="loadPage('billing')">Billing</li>
+
+<li onclick="loadPage('finance')">Finance</li>
+
+<li id="logout">Logout</li>
+
+</ul>
+
+</div>
+
+<!-- MAIN CONTENT -->
+
+<div class="main">
+
+<div class="topbar">
+
+<h1>Lelo International Hotel Management System</h1>
+
+</div>
+
+<div id="content">
+
+<!-- DASHBOARD CARDS -->
+
+<div class="cards">
+
+<div class="card">
+
+<h3>Rooms</h3>
+
+<p id="roomCount">0</p>
+
+</div>
+
+<div class="card">
+
+<h3>Bookings</h3>
+
+<p id="bookingCount">0</p>
+
+</div>
+
+<div class="card">
+
+<h3>Orders</h3>
+
+<p id="orderCount">0</p>
+
+</div>
+
+<div class="card">
+
+<h3>Revenue</h3>
+
+<p id="revenue">0</p>
+
+</div>
+
+</div>
+
+<!-- CHART -->
+
+<canvas id="revenueChart"></canvas>
+
+</div>
+
+</div>
+
+<script type="module" src="js/dashboard.js"></script>
+
+</body>
+
+</html>
