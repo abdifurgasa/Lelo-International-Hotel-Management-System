@@ -29,6 +29,10 @@
 
 <li onclick="loadPage('billing')" data-lang="billing">Billing</li>
 
+<li onclick="loadPage('restaurant')">Restaurant</li>
+  
+<li onclick="loadPage('drinks')">Drinks</li>
+
 <li onclick="loadPage('finance')" data-lang="finance">Finance</li>
 
 <li onclick="logout()">Logout</li>
@@ -125,7 +129,58 @@
 <div id="drinkOrders"></div>
 
 </div>
+<!-- Restaurant Page -->
+<div id="restaurant" class="page" style="display:none">
 
+<h2>Restaurant Menu</h2>
+
+<div class="card">
+
+<h3>Add Food Item</h3>
+
+<input type="text" id="foodName" placeholder="Food Name">
+<input type="number" id="foodPrice" placeholder="Price">
+<input type="file" id="foodPhoto">
+
+<button onclick="addFood()">Add Food</button>
+
+</div>
+
+<div class="card">
+
+<h3>Food List</h3>
+
+<div id="foodMenuList" class="menuList"></div>
+
+</div>
+
+</div>
+<!-- Drinks Page -->
+<div id="drinks" class="page" style="display:none">
+
+<h2>Drinks Menu</h2>
+
+<div class="card">
+
+<h3>Add Drink</h3>
+
+<input type="text" id="drinkName" placeholder="Drink Name">
+<input type="number" id="drinkPrice" placeholder="Price">
+<input type="file" id="drinkPhoto">
+
+<button onclick="addDrink()">Add Drink</button>
+
+</div>
+
+<div class="card">
+
+<h3>Drink List</h3>
+
+<div id="drinkMenuList" class="menuList"></div>
+
+</div>
+
+</div>
 <!-- Billing Page -->
 <div id="billing" class="page" style="display:none">
 
@@ -165,6 +220,8 @@
 <script src="js/order.js"></script>
 <script src="js/roleDashboard.js"></script>
 <script src="js/billing.js"></script>
+<script src="js/restaurant.js"></script>
+<script src="js/drinks.js"></script>
 <script src="js/finance.js"></script>
 
 </body>
