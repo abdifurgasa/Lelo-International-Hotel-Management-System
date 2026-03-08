@@ -88,45 +88,4 @@ Tablet Responsive
         padding:18px;
     }
 }
-.card{
 
-background:white;
-padding:15px;
-margin-bottom:20px;
-border-radius:10px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-
-}
-
-.card input,
-.card select{
-
-width:100%;
-padding:8px;
-margin:6px 0;
-
-}
-
-.card button{
-
-padding:10px;
-background:#2c7be5;
-color:white;
-border:none;
-border-radius:6px;
-
-}
-
-table{
-
-width:100%;
-border-collapse:collapse;
-
-}
-
-table th, table td{
-
-padding:10px;
-border-bottom:1px solid #ddd;
-
-}
