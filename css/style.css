@@ -4,9 +4,7 @@ margin:0;
 padding:0;
 font-family:Arial, Helvetica, sans-serif;
 
-background:url("../images/login-bg.jpg");
-background-size:cover;
-background-position:center;
+background:url("../images/login-bg.jpg") no-repeat center center/cover;
 
 display:flex;
 justify-content:center;
@@ -15,35 +13,41 @@ height:100vh;
 
 }
 
+/* Login Box */
+
 .login-container{
 
-background:rgba(255,255,255,0.9);
+background:rgba(255,255,255,0.95);
 
 padding:40px;
 
-border-radius:10px;
+border-radius:12px;
 
 width:320px;
 
 text-align:center;
 
-box-shadow:0 5px 20px rgba(0,0,0,0.3);
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
 
 }
+
+/* Title */
 
 .login-container h1{
 
 margin-bottom:5px;
+color:#1e293b;
 
 }
 
 .login-container h3{
 
 margin-bottom:20px;
-
-color:#555;
+color:#475569;
 
 }
+
+/* Inputs */
 
 .login-container input{
 
@@ -53,11 +57,15 @@ padding:10px;
 
 margin:10px 0;
 
-border-radius:5px;
+border-radius:6px;
 
-border:1px solid #ccc;
+border:1px solid #cbd5e1;
+
+font-size:14px;
 
 }
+
+/* Button */
 
 .login-container button{
 
@@ -71,11 +79,13 @@ color:white;
 
 border:none;
 
-border-radius:5px;
+border-radius:6px;
 
 cursor:pointer;
 
 font-size:16px;
+
+transition:0.3s;
 
 }
 
@@ -83,4 +93,4 @@ font-size:16px;
 
 background:#334155;
 
-}
+  }
