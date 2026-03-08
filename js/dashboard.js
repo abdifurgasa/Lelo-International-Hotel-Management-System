@@ -1,128 +1,131 @@
 import { auth, db } from "./firebase.js";
 
 import {
-  onAuthStateChanged,
-  signOut
+onAuthStateChanged,
+signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 import {
-  collection,
-  onSnapshot
+collection,
+onSnapshot,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js";
 
-// ===============================
-// LOGIN PROTECTION
-// ===============================
-
-onAuthStateChanged(auth, user => {
-  if (!user) {
-    window.location.href = "index.html"; // redirect if not logged in
-  }
-});
-
 
 // ===============================
-// ROOMS STATISTICS
+// ENTERPRISE AUTH PROTECTION
 // ===============================
 
-onSnapshot(collection(db, "rooms"), snapshot => {
-  document.getElementById("roomCount").innerText = snapshot.size;
-});
+onAuthStateChanged(auth,user=>{
 
-
-// ===============================
-// RESTAURANT (FOOD ORDERS)
-// ===============================
-
-onSnapshot(collection(db, "orders"), snapshot => {
-
-  let foodCount = 0;
-
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    if (data.type === "food") {
-      foodCount++;
-    }
-  });
-
-  document.getElementById("foodCount").innerText = foodCount;
+if(!user){
+window.location.href="index.html";
+}
 
 });
 
 
 // ===============================
-// DRINKS ORDERS
+// REAL TIME ROOM ANALYTICS
 // ===============================
 
-onSnapshot(collection(db, "orders"), snapshot => {
+onSnapshot(collection(db,"rooms"), snapshot=>{
+document.getElementById("roomCount").innerText = snapshot.size;
+});
 
-  let drinkCount = 0;
 
-  snapshot.forEach(doc => {
-    const data = doc.data();
-    if (data.type === "drink") {
-      drinkCount++;
-    }
-  });
+// ===============================
+// FOOD ORDERS ANALYTICS
+// ===============================
 
-  document.getElementById("drinkCount").innerText = drinkCount;
+onSnapshot(
+query(collection(db,"orders"),where("type","==","food")),
+snapshot=>{
+document.getElementById("foodCount").innerText = snapshot.size;
+});
+
+
+// ===============================
+// DRINK ORDERS ANALYTICS
+// ===============================
+
+onSnapshot(
+query(collection(db,"orders"),where("type","==","drink")),
+snapshot=>{
+document.getElementById("drinkCount").innerText = snapshot.size;
+});
+
+
+// ===============================
+// ENTERPRISE REVENUE CALCULATION
+// ===============================
+
+onSnapshot(collection(db,"finance"), snapshot=>{
+
+let totalRevenue = 0;
+
+snapshot.forEach(doc=>{
+const data = doc.data();
+if(data.amount){
+totalRevenue += Number(data.amount);
+}
+});
+
+updateRevenueChart(totalRevenue);
 
 });
 
 
 // ===============================
-// REVENUE CIRCULAR CHART
+// REVENUE CHART ENGINE
 // ===============================
+
+function updateRevenueChart(value){
 
 const revenueCanvas = document.getElementById("revenueChart");
 
-if (revenueCanvas) {
+if(!revenueCanvas) return;
 
-  new Chart(revenueCanvas, {
-    type: "doughnut", // circular chart
+new Chart(revenueCanvas,{
+type:"doughnut",
 
-    data: {
-      labels: ["Revenue Used", "Remaining"],
+data:{
+labels:["Revenue","Remaining"],
 
-      datasets: [{
-        data: [70, 30], // Example data, replace with real calculation later
-        backgroundColor: ["#22c55e", "#e5e7eb"]
-      }]
-    },
+datasets:[{
+data:[value,1000-value],
 
-    options: {
-      responsive: true,
-      plugins: {
-        legend: {
-          display: false
-        }
-      }
-    }
+backgroundColor:["#22c55e","#e5e7eb"]
+}]
+},
 
-  });
+options:{
+responsive:true,
+plugins:{
+legend:{display:false}
+}
+});
 
 }
 
 
 // ===============================
-// LOGOUT SYSTEM
+// LOGOUT ENGINE
 // ===============================
 
 const logoutBtn = document.getElementById("logout");
 
-if (logoutBtn) {
+if(logoutBtn){
 
-  logoutBtn.addEventListener("click", () => {
+logoutBtn.onclick=()=>{
 
-    signOut(auth).then(() => {
-      // Redirect to login page after logout
-      window.location.href = "index.html";
-    }).catch(error => {
-      console.error("Logout error:", error);
-    });
+signOut(auth).then(()=>{
+window.location.href="index.html";
+});
 
-  });
+};
 
 }
