@@ -6,80 +6,116 @@ signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
 import {
-doc,
-getDoc
+collection,
+onSnapshot
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
+import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js";
+
 
 // ===============================
-// Dashboard Protection + Role System
+// LOGIN PROTECTION
 // ===============================
 
-onAuthStateChanged(auth, async (user)=>{
-
+onAuthStateChanged(auth, user=>{
 if(!user){
 window.location.href="index.html";
-return;
+}
+});
+
+
+// ===============================
+// ROOMS STATISTICS
+// ===============================
+
+onSnapshot(collection(db,"rooms"), snapshot=>{
+document.getElementById("roomCount").innerText = snapshot.size;
+});
+
+
+// ===============================
+// RESTAURANT (FOOD ORDERS)
+// ===============================
+
+onSnapshot(collection(db,"orders"), snapshot=>{
+
+let foodCount = 0;
+
+snapshot.forEach(doc=>{
+
+const data = doc.data();
+
+if(data.type === "food"){
+foodCount++;
 }
 
+});
 
-// Get user profile from Firestore
-const userRef = doc(db,"users",user.uid);
-const snap = await getDoc(userRef);
-
-if(!snap.exists()){
-alert("User profile not found");
-return;
-}
-
-const role = snap.data().role;
-
-console.log("Logged Role:",role);
-
-
-// ===== Role Dashboard Routing (Ready Structure) =====
-
-switch(role){
-
-case "admin":
-console.log("Admin Dashboard");
-break;
-
-case "manager":
-console.log("Manager Dashboard");
-break;
-
-case "reception":
-console.log("Reception Dashboard");
-break;
-
-case "worker":
-console.log("Worker Dashboard");
-break;
-
-case "kitchen":
-console.log("Kitchen Dashboard");
-break;
-
-case "barman":
-console.log("Barman Dashboard");
-break;
-
-case "finance":
-console.log("Finance Dashboard");
-break;
-
-default:
-alert("Access denied");
-window.location.href="index.html";
-
-}
+document.getElementById("foodCount").innerText = foodCount;
 
 });
 
 
 // ===============================
-// Logout System
+// DRINKS ORDERS
+// ===============================
+
+onSnapshot(collection(db,"orders"), snapshot=>{
+
+let drinkCount = 0;
+
+snapshot.forEach(doc=>{
+
+const data = doc.data();
+
+if(data.type === "drink"){
+drinkCount++;
+}
+
+});
+
+document.getElementById("drinkCount").innerText = drinkCount;
+
+});
+
+
+// ===============================
+// REVENUE CIRCULAR CHART
+// ===============================
+
+const revenueCanvas = document.getElementById("revenueChart");
+
+if(revenueCanvas){
+
+new Chart(revenueCanvas,{
+type:"doughnut",
+
+data:{
+labels:["Revenue Used","Remaining"],
+
+datasets:[{
+data:[70,30],
+backgroundColor:[
+"#22c55e",
+"#e5e7eb"
+]
+}]
+},
+
+options:{
+responsive:true,
+plugins:{
+legend:{
+display:false
+}
+}
+});
+
+}
+
+
+// ===============================
+// LOGOUT SYSTEM
 // ===============================
 
 const logoutBtn = document.getElementById("logout");
@@ -93,50 +129,5 @@ window.location.href="index.html";
 });
 
 };
-
-}
-
-
-// ===============================
-// Circular Chart (Hotel Statistics)
-// ===============================
-
-const ctx = document.getElementById("chart");
-
-if(ctx){
-
-new Chart(ctx,{
-type:"doughnut",
-
-data:{
-labels:["Rooms","Bookings","Revenue","Orders"],
-
-datasets:[{
-label:"Hotel Statistics",
-
-data:[40,30,20,10],
-
-backgroundColor:[
-"#0ea5e9",
-"#22c55e",
-"#f59e0b",
-"#ef4444"
-]
-
-}]
-},
-
-options:{
-responsive:true,
-
-plugins:{
-legend:{
-position:"bottom"
-}
-}
-
-}
-
-});
 
 }
