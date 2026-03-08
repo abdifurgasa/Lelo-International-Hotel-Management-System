@@ -10,7 +10,9 @@ document.getElementById(page).style.display="block";
 
 }
 
-
+if(page==="staff"){
+loadStaff();
+}
 function logout(){
 
 let confirmLogout=confirm("Are you sure you want to logout?");
