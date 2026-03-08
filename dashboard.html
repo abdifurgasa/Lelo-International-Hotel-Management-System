@@ -3,91 +3,79 @@
 
 <head>
 
-<title>Dashboard</title>
+<title>Dashboard - Lelo International Hotel</title>
 
-<link rel="stylesheet" href="css/dashboard.css?v=2">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="css/dashboard.css">
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
-<!-- Sidebar -->
+<!-- Sidebar Menu -->
 <div class="sidebar">
 
 <h2>Lelo Hotel</h2>
 
 <ul>
 
-<li onclick="loadPage('dashboard')">
-<span data-lang="dashboard">Dashboard</span>
-</li>
+<li onclick="window.location.reload()">Dashboard</li>
 
-<li>
-<span data-lang="rooms">Rooms</span>
-</li>
+<li>Rooms</li>
+<li>Restaurant</li>
+<li>Drinks</li>
+<li>Bookings</li>
+<li>Finance</li>
 
-<li>
-<span data-lang="booking">Booking</span>
-</li>
-
-<li>
-<span data-lang="food">Food</span>
-</li>
-
-<li>
-<span data-lang="drink">Drink</span>
-</li>
-
-<li>
-<span data-lang="billing">Billing</span>
-</li>
-
-<li>
-<span data-lang="finance">Finance</span>
-</li>
+<li id="logout">Logout</li>
 
 </ul>
 
-<br>
-
-<button id="logout" data-lang="logout">Logout</button>
-
 </div>
+
 
 <!-- Main Dashboard -->
 <div class="main">
 
 <div class="topbar">
-<h2 data-lang="dashboard">Dashboard</h2>
+<h2>Dashboard</h2>
 </div>
 
+
+<!-- Statistics Cards -->
 <div class="cards">
 
 <div class="card">
-<h3 data-lang="rooms">Rooms</h3>
+<h3>Rooms</h3>
 <p id="roomCount">0</p>
 </div>
 
 <div class="card">
-<h3 data-lang="booking">Booking</h3>
-<p id="bookingCount">0</p>
+<h3>Restaurant</h3>
+<p id="foodCount">0</p>
 </div>
 
 <div class="card">
-<h3 data-lang="finance">Revenue</h3>
-<p id="revenue">0</p>
+<h3>Drinks</h3>
+<p id="drinkCount">0</p>
+</div>
+
+<div class="card">
+<h3>Revenue</h3>
+<canvas id="revenueChart"></canvas>
 </div>
 
 </div>
 
-<br>
-
-<canvas id="chart"></canvas>
-
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Dashboard Script -->
 <script type="module" src="js/dashboard.js"></script>
 
 </body>
-  </html>
+</html>
