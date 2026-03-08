@@ -8,11 +8,11 @@ password: "Jecha Darbii/Icciitii",
 login: "Seeni",
 
 dashboard: "Daashboordii",
-rooms: "Kutaa Ciisichaa",
-booking: "Boqonnaa / Booking",
+rooms: "Kutaalee",
+booking: "Qabsiisa",
 food: "Nyaata",
 drink: "Dhugaatii",
-billing: "Herrega",
+billing: "Kaffaltii Herrega",
 finance: "Faayinaansii",
 
 logout: "Ba'i"
