@@ -3,16 +3,18 @@
 
 <head>
 
-<title>Lelo International Hotel</title>
+<title>Lelo International Hotel System</title>
 
 <link rel="stylesheet" href="css/dashboard.css">
+
+<!-- Chart JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
 <body>
 
 <!-- Sidebar -->
-
 <div class="sidebar">
 
 <h2 data-lang="hotelName">Lelo International Hotel</h2>
@@ -23,39 +25,31 @@
 
 <li onclick="loadPage('rooms')" data-lang="rooms">Rooms</li>
 
-<li onclick="loadPage('booking')" data-lang="booking">Booking</li>
-
-<li onclick="loadPage('food')" data-lang="food">Food</li>
-  
-<li onclick="loadPage('order')" data-lang="orders"></li>
-
-<li onclick="loadPage('drinks')" data-lang="drinks">Drinks</li>
+<li onclick="loadPage('orderPage')" data-lang="orders">Orders</li>
 
 <li onclick="loadPage('billing')" data-lang="billing">Billing</li>
 
 <li onclick="loadPage('finance')" data-lang="finance">Finance</li>
-  
-<li onclick="loadPage('staff')" data-lang="staff"></li>
-  
+
+<li onclick="logout()">Logout</li>
+
 </ul>
 
 </div>
 
-
-<!-- Main Content -->
-
+<!-- Content Area -->
 <div class="content">
 
 <!-- Dashboard Page -->
-
 <div id="dashboard" class="page">
 
 <h1>Welcome to Lelo International Hotel System</h1>
 
-<p>Hotel management dashboard</p>
+<p>Hotel Management Dashboard</p>
 
 </div>
 
+<!-- Rooms Page -->
 <div id="rooms" class="page" style="display:none">
 
 <h2>Room Management</h2>
@@ -83,7 +77,6 @@
 
 </div>
 
-
 <div class="card">
 
 <h3>Room List</h3>
@@ -93,13 +86,11 @@
 <thead>
 
 <tr>
-
 <th>Photo</th>
 <th>Room</th>
 <th>Type</th>
 <th>Price</th>
 <th>Status</th>
-
 </tr>
 
 </thead>
@@ -112,52 +103,8 @@
 
 </div>
 
-<div id="staffPage" class="page">
-
-<h2 data-lang="staffManagement"></h2>
-
-<input type="email" id="staffEmail" placeholder="Email">
-<input type="password" id="staffPassword" placeholder="Password">
-
-<select id="staffRole">
-<option value="reception">Reception</option>
-<option value="kitchen">Kitchen</option>
-<option value="barman">Barman</option>
-<option value="worker">Worker</option>
-</select>
-
-<button onclick="addStaff()">Add Staff</button>
-
-<div id="staffList"></div>
-
-</div>
-<!-- Booking Page -->
-
-<div id="booking" class="page" style="display:none">
-
-<h2>Booking System</h2>
-
-</div>
-
-
-<!-- Food Page -->
-
-<div id="food" class="page" style="display:none">
-
-<h2>Food Orders</h2>
-
-</div>
-
-
-<!-- Drinks Page -->
-
-<div id="drinks" class="page" style="display:none">
-
-<h2>Drink Orders</h2>
-
-</div>
-
-<div id="orderPage" class="page">
+<!-- Order Page -->
+<div id="orderPage" class="page" style="display:none">
 
 <h2>Orders</h2>
 
@@ -174,20 +121,34 @@
 
 <h3>Order List</h3>
 
-<div id="orderList"></div>
+<div id="foodOrders"></div>
+<div id="drinkOrders"></div>
 
 </div>
-<!-- Billing Page -->
 
+<!-- Billing Page -->
 <div id="billing" class="page" style="display:none">
 
 <h2>Guest Billing</h2>
 
+<table>
+
+<thead>
+<tr>
+<th>Item</th>
+<th>Type</th>
+<th>Price</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody id="billingList"></tbody>
+
+</table>
+
 </div>
 
-
 <!-- Finance Page -->
-
 <div id="finance" class="page" style="display:none">
 
 <h2>Hotel Revenue</h2>
@@ -198,9 +159,13 @@
 
 </div>
 
+<!-- Scripts -->
 <script src="js/dashboard.js"></script>
 <script src="js/rooms.js"></script>
+<script src="js/order.js"></script>
+<script src="js/roleDashboard.js"></script>
+<script src="js/billing.js"></script>
+<script src="js/finance.js"></script>
 
 </body>
-
 </html>
