@@ -9,17 +9,18 @@ margin:0;
 font-family:"Times New Roman", Times, serif;
 font-weight:bold;
 
-/* Beautiful Soft Hotel Background */
+/* ⭐ Best Professional Hotel Background Color */
 background: linear-gradient(
 135deg,
-#f5f7fa,
-#e4edf7,
-#f1f5f9
+#ffffff,
+#f0f4f8,
+#e6eef5,
+#ffffff
 );
 
 /* Smooth Background Animation */
 background-size:400% 400%;
-animation: backgroundMove 20s ease infinite;
+animation: backgroundMove 25s ease infinite;
 
 display:flex;
 }
@@ -71,15 +72,14 @@ transition:0.3s;
 }
 
 /* Menu Hover */
-
 .sidebar li:hover{
 background:#f1f5f9;
 }
 
 /* Logout Style */
-
 #logout{
 color:red;
+font-weight:bold;
 }
 
 /* =========================
@@ -92,7 +92,6 @@ padding:20px;
 }
 
 /* Top Bar */
-
 .topbar{
 background:white;
 
@@ -130,7 +129,6 @@ transition:0.3s;
 }
 
 /* Card Hover Effect */
-
 .card:hover{
 transform:translateY(-5px);
 }
