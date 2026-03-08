@@ -32,7 +32,9 @@
 <li onclick="loadPage('billing')" data-lang="billing">Billing</li>
 
 <li onclick="loadPage('finance')" data-lang="finance">Finance</li>
-
+  
+<li onclick="loadPage('staff')" data-lang="staff"></li>
+  
 </ul>
 
 </div>
@@ -108,7 +110,25 @@
 
 </div>
 
+<div id="staffPage" class="page">
 
+<h2 data-lang="staffManagement"></h2>
+
+<input type="email" id="staffEmail" placeholder="Email">
+<input type="password" id="staffPassword" placeholder="Password">
+
+<select id="staffRole">
+<option value="reception">Reception</option>
+<option value="kitchen">Kitchen</option>
+<option value="barman">Barman</option>
+<option value="worker">Worker</option>
+</select>
+
+<button onclick="addStaff()">Add Staff</button>
+
+<div id="staffList"></div>
+
+</div>
 <!-- Booking Page -->
 
 <div id="booking" class="page" style="display:none">
