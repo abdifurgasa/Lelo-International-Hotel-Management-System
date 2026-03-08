@@ -14,44 +14,45 @@ onSnapshot
 
 import { Chart } from "https://cdn.jsdelivr.net/npm/chart.js";
 
+/* Login Protection */
 
-// Login Protection
 onAuthStateChanged(auth,user=>{
 if(!user){
 window.location.href="index.html";
 }
 });
 
+/* Rooms Count */
 
-// Rooms Count
 onSnapshot(collection(db,"rooms"), snapshot=>{
 document.getElementById("roomCount").innerText = snapshot.size;
 });
 
+/* Booking Count */
 
-// Booking Count
 onSnapshot(collection(db,"bookings"), snapshot=>{
 document.getElementById("bookingCount").innerText = snapshot.size;
 });
 
+/* Food Orders */
 
-// Food Orders
 onSnapshot(query(collection(db,"orders"),where("type","==","food")), snapshot=>{
 document.getElementById("foodCount").innerText = snapshot.size;
 });
 
+/* Drink Orders */
 
-// Drink Orders
 onSnapshot(query(collection(db,"orders"),where("type","==","drink")), snapshot=>{
 document.getElementById("drinkCount").innerText = snapshot.size;
 });
 
+/* Billing */
 
-// Billing Count
 onSnapshot(collection(db,"finance"), snapshot=>{
 document.getElementById("billingCount").innerText = snapshot.size;
 
 let revenue=0;
+
 snapshot.forEach(doc=>{
 let d=doc.data();
 if(d.amount) revenue+=Number(d.amount);
@@ -61,8 +62,8 @@ updateRevenueChart(revenue);
 
 });
 
+/* Revenue Chart */
 
-// Revenue Chart
 function updateRevenueChart(value){
 
 const canvas=document.getElementById("revenueChart");
@@ -81,9 +82,7 @@ backgroundColor:["#22c55e","#e5e7eb"]
 },
 
 options:{
-plugins:{
-legend:{display:false}
-},
+plugins:{legend:{display:false}},
 responsive:true
 }
 
@@ -91,8 +90,8 @@ responsive:true
 
 }
 
+/* Logout */
 
-// Logout
 document.getElementById("logout").onclick=()=>{
 
 signOut(auth).then(()=>{
