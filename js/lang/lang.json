@@ -6,16 +6,16 @@ const languages = { en, am, om };
 
 export function setLanguage(lang){
 
-const dict = languages[lang];
+    const dict = languages[lang];
 
-document.querySelectorAll("[data-lang]").forEach(el=>{
+    document.querySelectorAll("[data-lang]").forEach(el => {
 
-const key = el.dataset.lang;
+        const key = el.dataset.lang;
 
-if(dict[key]){
-el.innerText = dict[key];
-}
+        if(dict[key]){
+            el.innerText = dict[key];
+        }
 
-});
+    });
 
 }
