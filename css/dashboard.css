@@ -1,123 +1,171 @@
+/* ======================================
+LELO INTERNATIONAL HOTEL
+Professional Dashboard Style
+====================================== */
+
 body{
 margin:0;
 font-family:"Times New Roman", Times, serif;
-background:linear-gradient(135deg,#e3f2fd,#f1f5f9);
+font-weight:bold;
+
+background:#f4f6f9;
+
 display:flex;
-color:#0f172a;
 }
 
-/* Sidebar Luxury Style */
+/* ===== Sidebar Menu ===== */
 
 .sidebar{
-width:240px;
+width:220px;
 height:100vh;
-background:linear-gradient(180deg,#0f172a,#1e293b);
-color:white;
-padding:25px;
-box-shadow:4px 0 20px rgba(0,0,0,0.2);
+
+background:#ffffff;
+
+color:#222;
+
+padding:20px;
+box-sizing:border-box;
+
+border-right:1px solid #ddd;
 }
 
 .sidebar h2{
 text-align:center;
-font-weight:bold;
-letter-spacing:2px;
-color:#facc15;
+margin-bottom:30px;
+font-size:20px;
 }
 
 .sidebar ul{
 list-style:none;
 padding:0;
-margin-top:40px;
 }
 
 .sidebar li{
-padding:14px;
-margin-bottom:10px;
+padding:12px;
+margin:6px 0;
 cursor:pointer;
-border-radius:10px;
-font-weight:bold;
+border-radius:6px;
 transition:0.3s;
 }
 
+/* Menu Hover */
+
 .sidebar li:hover{
-background:#334155;
-transform:translateX(6px);
+background:#f1f5f9;
 }
 
-/* Main Area */
+/* Logout Style */
+
+#logout{
+color:red;
+}
+
+/* ===== Main Dashboard ===== */
 
 .main{
 flex:1;
-padding:30px;
+padding:20px;
 }
 
-/* Topbar Luxury Style */
+/* Top Bar */
 
 .topbar{
 background:white;
-padding:20px;
-border-radius:16px;
-margin-bottom:30px;
-font-weight:bold;
-box-shadow:0 6px 20px rgba(0,0,0,0.08);
-color:#1d4ed8;
+
+padding:15px;
+border-radius:10px;
+
+margin-bottom:20px;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* Luxury Cards */
+/* ===== Statistic Cards ===== */
 
 .cards{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:30px;
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+gap:20px;
 }
 
 .card{
-background:linear-gradient(135deg,#ffffff,#f8fafc);
-padding:30px;
-border-radius:18px;
+background:white;
+
+padding:25px;
+
+border-radius:12px;
+
 text-align:center;
-box-shadow:0 8px 25px rgba(0,0,0,0.08);
-transition:0.35s;
-border:1px solid #e2e8f0;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+
+transition:0.3s;
 }
 
+/* Card Hover Animation */
+
 .card:hover{
-transform:translateY(-8px) scale(1.02);
-box-shadow:0 12px 30px rgba(0,0,0,0.12);
+transform:translateY(-4px);
 }
 
 .card h3{
 margin:0;
-color:#1d4ed8;
-font-weight:bold;
-font-size:18px;
+color:#444;
 }
 
 .card p{
-font-size:34px;
-font-weight:bold;
-margin-top:14px;
-color:#0f172a;
-}
-
-/* Luxury Buttons */
-
-button{
-background:linear-gradient(135deg,#1d4ed8,#0f172a);
-color:white;
-border:none;
-padding:10px 18px;
-border-radius:8px;
-font-weight:bold;
-cursor:pointer;
-transition:0.3s;
-}
-
-button:hover{
-opacity:0.9;
-transform:scale(1.05);
-  }.card p{
-font-size:28px;
+font-size:30px;
 font-weight:bold;
 margin-top:10px;
+color:#111;
+}
+
+/* ===== Chart Area ===== */
+
+canvas{
+width:100% !important;
+max-height:350px;
+
+background:white;
+
+padding:20px;
+
+border-radius:12px;
+
+box-shadow:0 2px 6px rgba(0,0,0,0.08);
+}
+
+/* ===== Responsive Tablet Support ===== */
+
+@media(max-width:900px){
+
+.sidebar{
+width:180px;
+}
+
+.card p{
+font-size:24px;
+}
+
+}
+
+@media(max-width:600px){
+
+body{
+flex-direction:column;
+}
+
+.sidebar{
+width:100%;
+height:auto;
+}
+
+.main{
+padding:10px;
+}
+
+.cards{
+grid-template-columns:1fr;
+}
+
 }
