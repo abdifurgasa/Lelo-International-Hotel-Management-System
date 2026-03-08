@@ -1,7 +1,7 @@
-/* =========================================
+/* ===============================
 LELO INTERNATIONAL HOTEL
-Professional Dashboard UI Style
-========================================= */
+Blue Animated Glass Dashboard
+=============================== */
 
 body{
 margin:0;
@@ -9,104 +9,97 @@ margin:0;
 font-family:"Times New Roman", Times, serif;
 font-weight:bold;
 
-/* ⭐ Best Professional Hotel Background Color */
+/* Blue Gradient Background */
 background: linear-gradient(
 135deg,
-#ffffff,
-#f0f4f8,
-#e6eef5,
-#ffffff
+#0ea5e9,
+#3b82f6,
+#1d4ed8
 );
 
-/* Smooth Background Animation */
+/* Animation */
 background-size:400% 400%;
-animation: backgroundMove 25s ease infinite;
+animation: bgMove 20s ease infinite;
 
 display:flex;
 }
 
 /* Background Animation */
-@keyframes backgroundMove{
+@keyframes bgMove{
 0%{background-position:0% 50%;}
 50%{background-position:100% 50%;}
 100%{background-position:0% 50%;}
 }
 
 /* =========================
-Sidebar Menu
+Transparent Glass Sidebar
 ========================= */
 
 .sidebar{
 width:220px;
 height:100vh;
 
-background:#ffffff;
+/* Glass Transparency */
+background: rgba(255,255,255,0.1);
 
-color:#222;
+backdrop-filter: blur(12px);
+
+color:white;
 
 padding:20px;
 box-sizing:border-box;
 
-border-right:1px solid #ddd;
+border-right:1px solid rgba(255,255,255,0.2);
 }
 
-.sidebar h2{
-text-align:center;
-margin-bottom:30px;
-font-size:20px;
-}
-
-.sidebar ul{
-list-style:none;
-padding:0;
-}
+/* Sidebar Menu Hover */
 
 .sidebar li{
 padding:12px;
 margin:6px 0;
-
 cursor:pointer;
 border-radius:6px;
-
 transition:0.3s;
+color:white;
 }
 
-/* Menu Hover */
 .sidebar li:hover{
-background:#f1f5f9;
+background: rgba(255,255,255,0.2);
 }
 
 /* Logout Style */
+
 #logout{
-color:red;
-font-weight:bold;
+color:#ffcccc;
 }
 
 /* =========================
-Main Dashboard Area
+Main Dashboard Glass Panel
 ========================= */
 
 .main{
 flex:1;
 padding:20px;
+
+/* Transparent Glass Mode */
+background: rgba(255,255,255,0.08);
+
+backdrop-filter: blur(15px);
+
+border-radius:20px;
+
+margin:20px;
 }
 
-/* Top Bar */
-.topbar{
-background:white;
+/* Topbar */
 
+.topbar{
 padding:15px;
 
-border-radius:10px;
-
-margin-bottom:20px;
-
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
+color:white;
 }
 
-/* =========================
-Statistic Cards
-========================= */
+/* Statistic Cards */
 
 .cards{
 display:grid;
@@ -115,65 +108,49 @@ gap:20px;
 }
 
 .card{
-background:white;
+
+background: rgba(255,255,255,0.15);
+
+backdrop-filter: blur(12px);
+
+color:white;
 
 padding:25px;
 
-border-radius:12px;
+border-radius:15px;
 
 text-align:center;
-
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
 
 transition:0.3s;
 }
 
-/* Card Hover Effect */
+/* Card Hover */
+
 .card:hover{
 transform:translateY(-5px);
 }
 
-.card h3{
-margin:0;
-color:#444;
-}
-
-.card p{
-font-size:30px;
-font-weight:bold;
-margin-top:10px;
-color:#111;
-}
-
-/* =========================
-Chart Area
-========================= */
+/* Chart */
 
 canvas{
 width:100% !important;
 max-height:350px;
 
-background:white;
+background: rgba(255,255,255,0.15);
+
+backdrop-filter: blur(12px);
 
 padding:20px;
 
-border-radius:12px;
-
-box-shadow:0 2px 6px rgba(0,0,0,0.08);
+border-radius:15px;
 }
 
-/* =========================
-Responsive Tablet Support
-========================= */
+/* Responsive Tablet */
 
 @media(max-width:900px){
 
 .sidebar{
 width:180px;
-}
-
-.card p{
-font-size:24px;
 }
 
 }
@@ -190,7 +167,7 @@ height:auto;
 }
 
 .main{
-padding:10px;
+margin:10px;
 }
 
 .cards{
