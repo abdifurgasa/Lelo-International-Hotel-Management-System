@@ -157,7 +157,26 @@
 
 </div>
 
+<div id="orderPage" class="page">
 
+<h2>Orders</h2>
+
+<select id="orderType">
+<option value="food">Food</option>
+<option value="drink">Drink</option>
+</select>
+
+<input type="text" id="orderItem" placeholder="Item name">
+
+<input type="number" id="orderPrice" placeholder="Price">
+
+<button onclick="addOrder()">Add Order</button>
+
+<h3>Order List</h3>
+
+<div id="orderList"></div>
+
+</div>
 <!-- Billing Page -->
 
 <div id="billing" class="page" style="display:none">
