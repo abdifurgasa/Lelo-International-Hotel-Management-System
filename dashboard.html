@@ -32,6 +32,8 @@
 <li onclick="loadPage('restaurant')">Restaurant</li>
   
 <li onclick="loadPage('drinks')">Drinks</li>
+  
+<li onclick="loadPage('staffPage')">Staff Management</li>
 
 <li onclick="loadPage('finance')" data-lang="finance">Finance</li>
 
@@ -223,7 +225,29 @@
 </table>
 
 </div>
+<!-- Staff Management Page -->
+<div id="staffPage" class="page" style="display:none">
 
+<h2>Staff Management</h2>
+
+<input type="email" id="staffEmail" placeholder="Staff Email">
+
+<input type="password" id="staffPassword" placeholder="Password">
+
+<select id="staffRole">
+<option value="reception">Reception</option>
+<option value="kitchen">Kitchen</option>
+<option value="barman">Barman</option>
+<option value="worker">Worker</option>
+</select>
+
+<button onclick="addStaff()">Add Staff</button>
+
+<h3>Staff List</h3>
+
+<div id="staffList"></div>
+
+</div>
 <!-- Finance Page -->
 <div id="finance" class="page" style="display:none">
 
@@ -242,6 +266,7 @@
 <script src="js/billing.js"></script>
 <script src="js/restaurant.js"></script>
 <script src="js/drinks.js"></script>
+<script src="js/staff.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="js/finance.js"></script>
   
