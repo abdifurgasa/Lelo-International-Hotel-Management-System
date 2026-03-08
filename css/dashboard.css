@@ -1,117 +1,60 @@
 body{
+
 margin:0;
 font-family:"Times New Roman", Times, serif;
-font-weight:bold;
-
-/* Blue-Green Enterprise Background */
-background: linear-gradient(135deg,#0f172a,#0ea5e9,#22c55e);
-
-background-size:400% 400%;
-animation:bgMove 20s ease infinite;
-
 display:flex;
+background:#f4f6fb;
+
 }
 
-/* Background Animation */
-@keyframes bgMove{
-0%{background-position:0% 50%;}
-50%{background-position:100% 50%;}
-100%{background-position:0% 50%;}
-}
-
-/* Sidebar */
 .sidebar{
+
 width:220px;
 height:100vh;
-
-/* Transparent Sidebar */
-background: rgba(255,255,255,0.03);
-
-backdrop-filter: blur(12px);
-
+background:#1f2d3d;
 color:white;
-
-padding:20px;
-box-sizing:border-box;
-
-border-right:1px solid rgba(255,255,255,0.1);
-}
-
-.sidebar li{
-padding:12px;
-margin:6px 0;
-cursor:pointer;
-border-radius:6px;
-transition:0.3s;
-color:white;
-list-style:none;
-}
-
-.sidebar li:hover{
-background: rgba(255,255,255,0.15);
-}
-
-#logout{
-color:#ffcccc;
-}
-
-/* Main Panel */
-.main{
-flex:1;
 padding:20px;
 
-background: rgba(255,255,255,0.05);
-backdrop-filter: blur(12px);
-
-border-radius:20px;
-margin:20px;
 }
 
-/* Cards */
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-}
+.sidebar h2{
 
-.card{
-padding:25px;
-border-radius:15px;
 text-align:center;
-color:white;
-transition:0.3s;
+
 }
 
-/* Colors */
-.card.rooms{background:linear-gradient(135deg,#2563eb,#0ea5e9);}
-.card.booking{background:linear-gradient(135deg,#0ea5e9,#14b8a6);}
-.card.food{background:linear-gradient(135deg,#16a34a,#22c55e);}
-.card.drink{background:linear-gradient(135deg,#0f766e,#14b8a6);}
-.card.billing{background:linear-gradient(135deg,#9333ea,#6366f1);}
-.card.revenue{background:linear-gradient(135deg,#f59e0b,#eab308);}
+.sidebar ul{
 
-/* Chart */
-canvas{
-width:100%!important;
-height:160px!important;
+list-style:none;
+padding:0;
 
-background: rgba(255,255,255,0.08);
-backdrop-filter: blur(12px);
-
-border-radius:15px;
-padding:20px;
 }
 
-/* Responsive */
-@media(max-width:600px){
-body{flex-direction:column;}
+.sidebar ul li{
 
-.sidebar{
+padding:10px;
+cursor:pointer;
+
+}
+
+.sidebar ul li:hover{
+
+background:#2c7be5;
+
+}
+
+.content{
+
+padding:30px;
 width:100%;
-height:auto;
+
 }
 
-.main{
-margin:10px;
-}
+.page{
+
+background:white;
+padding:20px;
+border-radius:10px;
+box-shadow:0 5px 20px rgba(0,0,0,0.1);
+
 }
