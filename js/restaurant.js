@@ -11,17 +11,17 @@ window.loadFoods = async function() {
 
     try {
         const foodSnap = await getDocs(collection(db, "foods"));
-        foodSnap.forEach(doc => {
-            const food = doc.data();
+        foodSnap.forEach(docSnap => {
+            const food = docSnap.data();
             const div = document.createElement("div");
-            div.className = "roomCard"; // reuse style
+            div.className = "roomCard"; // reuse card style
             div.innerHTML = `
                 <img src="${food.photo || 'img/default-food.jpg'}" alt="Food">
                 <h4>${food.name}</h4>
                 <p>Price: $${food.price}</p>
             `;
 
-            div.onclick = () => orderItem(doc.id, food, "food");
+            div.onclick = () => orderItem(docSnap.id, food, "food");
             list.appendChild(div);
         });
     } catch (err) {
@@ -74,6 +74,12 @@ async function orderItem(itemId, itemData, type) {
     const guest = prompt("Guest Name / Email?");
     if (!guest) return;
 
+    const payment = prompt("Payment Method? (cash / transfer)").toLowerCase();
+    if (payment !== "cash" && payment !== "transfer") {
+        alert("Invalid payment method. Use 'cash' or 'transfer'");
+        return;
+    }
+
     try {
         await addDoc(collection(db, "billing"), {
             itemId,
@@ -81,9 +87,11 @@ async function orderItem(itemId, itemData, type) {
             name: itemData.name,
             price: itemData.price,
             guest,
-            status: "Pending"
+            status: "Paid",
+            paymentMethod: payment
         });
-        alert(`${type} ordered! Billing added.`);
+
+        alert(`${type} ordered and paid! Billing added.`);
     } catch (err) {
         console.log(err);
         alert("Order failed");
