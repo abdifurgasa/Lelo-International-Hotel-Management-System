@@ -2,24 +2,18 @@
 // IMPORT FIREBASE
 // =========================
 import { auth, db } from "./firebase.js";
-import {
-    collection,
-    getDocs,
-    query,
-    where
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 // =========================
 // WAIT FOR AUTH STATE
 // =========================
 auth.onAuthStateChanged(async (user) => {
-
     if (!user) {
-        // Not logged in → redirect
         window.location = "index.html";
         return;
     }
 
+    // Everything inside this block runs AFTER user is logged in
     try {
         // Get user role
         const q = query(collection(db, "users"), where("email", "==", user.email));
@@ -32,17 +26,33 @@ auth.onAuthStateChanged(async (user) => {
 
         const role = snapshot.docs[0].data().role;
 
-        // If staff tries to open manager page → deny
-        if (role !== "manager") {
-            const staffPages = ["staffPage"];
-            staffPages.forEach(page => {
-                const el = document.getElementById(page);
-                if (el) el.style.display = "none";
+        // Initialize dashboard menu toggle
+        const dashboardTitle = document.getElementById("dashboardMenu");
+        const dashboardSubmenu = document.getElementById("dashboardSubmenu");
+
+        dashboardTitle.addEventListener("click", e => {
+            e.stopPropagation();
+            dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
+        });
+
+        document.addEventListener("click", e => {
+            if (!dashboardTitle.contains(e.target) && !dashboardSubmenu.contains(e.target)) {
+                dashboardSubmenu.style.display = "none";
+            }
+        });
+
+        // Logout button
+        const logoutBtn = document.querySelector(".logoutBtn");
+        if (logoutBtn) {
+            logoutBtn.addEventListener("click", () => {
+                if (confirm("Logout?")) {
+                    auth.signOut().then(() => window.location = "index.html");
+                }
             });
         }
 
-        // Load dashboard automatically
-        loadPage("dashboard");
+        // Load dashboard page by default
+        await loadPage("dashboard", role);
 
     } catch (err) {
         console.log("Auth error:", err);
@@ -52,32 +62,33 @@ auth.onAuthStateChanged(async (user) => {
 // =========================
 // LOAD PAGE FUNCTION
 // =========================
-window.loadPage = async function(pageId) {
-
-    // Hide all pages
+async function loadPage(pageId, role = "staff") {
     document.querySelectorAll(".page").forEach(p => p.style.display = "none");
 
-    // Show selected page
+    // Role check: hide manager-only pages
+    const managerPages = ["staffPage"];
+    if (role !== "manager" && managerPages.includes(pageId)) {
+        alert("Only manager allowed");
+        return;
+    }
+
     const page = document.getElementById(pageId);
     if (page) page.style.display = "block";
 
-    // Call specific loaders
-    if (pageId === "dashboard") loadDashboardStats();
+    // Page-specific loaders
+    if (pageId === "dashboard") await loadDashboardStats();
     if (pageId === "staffPage" && typeof loadStaff === "function") loadStaff();
-    if (pageId === "orderPage") {
-        if (typeof loadOrders === "function") loadOrders();
-    }
+    if (pageId === "orderPage" && typeof loadOrders === "function") loadOrders();
     if (pageId === "restaurant" && typeof loadFoods === "function") loadFoods();
     if (pageId === "drinks" && typeof loadDrinks === "function") loadDrinks();
     if (pageId === "finance" && typeof loadFinance === "function") loadFinance();
-};
+}
 
 // =========================
 // DASHBOARD STATS
 // =========================
 async function loadDashboardStats() {
     try {
-        // Rooms
         const roomsSnap = await getDocs(collection(db, "rooms"));
         const totalRooms = roomsSnap.size;
         let occupiedRooms = 0;
@@ -85,39 +96,23 @@ async function loadDashboardStats() {
             if (r.data().status === "Occupied") occupiedRooms++;
         });
 
-        // Foods & Drinks
         const foodsSnap = await getDocs(collection(db, "foods"));
         const drinksSnap = await getDocs(collection(db, "drinks"));
         const totalFoods = foodsSnap.size;
         const totalDrinks = drinksSnap.size;
 
-        // Billing for today
-        const billingSnap = await getDocs(collection(db, "billing"));
-        let todayRevenue = 0;
-        const today = new Date().toISOString().split('T')[0];
-
-        billingSnap.forEach(doc => {
-            const data = doc.data();
-            const date = data.date ? data.date.split('T')[0] : null;
-            if (date === today) {
-                todayRevenue += data.price || 0;
-            }
-        });
-
-        // Update UI
+        // Update cards
         if (document.getElementById("totalRooms")) document.getElementById("totalRooms").innerText = totalRooms;
         if (document.getElementById("occupiedRooms")) document.getElementById("occupiedRooms").innerText = occupiedRooms;
         if (document.getElementById("totalFoods")) document.getElementById("totalFoods").innerText = totalFoods;
         if (document.getElementById("totalDrinks")) document.getElementById("totalDrinks").innerText = totalDrinks;
 
-        // Show today's date
+        // Show today date
         const todayDateEl = document.getElementById("todayDate");
-        if (todayDateEl) {
-            todayDateEl.innerText = new Date().toLocaleDateString();
-        }
+        if (todayDateEl) todayDateEl.innerText = new Date().toLocaleDateString();
 
         // Load chart
-        loadRevenueChart(todayRevenue, totalFoods, totalDrinks);
+        loadRevenueChart(totalRooms, totalFoods, totalDrinks);
 
     } catch (err) {
         console.log("Dashboard error:", err);
@@ -127,7 +122,7 @@ async function loadDashboardStats() {
 // =========================
 // REVENUE CHART
 // =========================
-function loadRevenueChart(roomsRevenue = 0, foodRevenue = 0, drinkRevenue = 0) {
+function loadRevenueChart(roomsRevenue, foodRevenue, drinkRevenue) {
     const ctx = document.getElementById("revenueChart");
     if (!ctx) return;
 
@@ -143,35 +138,7 @@ function loadRevenueChart(roomsRevenue = 0, foodRevenue = 0, drinkRevenue = 0) {
         },
         options: {
             responsive: true,
-            plugins: {
-                legend: { display: false }
-            }
+            plugins: { legend: { display: false } }
         }
     });
 }
-
-// =========================
-// LOGOUT
-// =========================
-window.logout = function() {
-    if (confirm("Logout?")) {
-        auth.signOut().then(() => window.location = "index.html");
-    }
-};
-
-// =========================
-// DASHBOARD MENU TOGGLE
-// =========================
-const dashboardTitle = document.getElementById("dashboardMenu");
-const dashboardSubmenu = document.getElementById("dashboardSubmenu");
-
-dashboardTitle.addEventListener("click", function(e){
-    e.stopPropagation();
-    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
-});
-
-document.addEventListener("click", function(e){
-    if(!dashboardTitle.contains(e.target) && !dashboardSubmenu.contains(e.target)){
-        dashboardSubmenu.style.display = "none";
-    }
-});
