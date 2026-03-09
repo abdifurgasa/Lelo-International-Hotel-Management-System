@@ -5,16 +5,26 @@ import { auth, db } from "./firebase.js";
 import {
     collection,
     getDocs,
-    doc,
-    getDoc,
     query,
     where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+
+// =========================
+// CHECK LOGIN STATE
+// =========================
+auth.onAuthStateChanged(user => {
+    if (!user) {
+        window.location = "index.html";
+    }
+});
+
 
 // =========================
 // PAGE LOADER
 // =========================
 window.loadPage = async function(pageId) {
+
     const user = auth.currentUser;
 
     if (!user) {
@@ -23,8 +33,13 @@ window.loadPage = async function(pageId) {
     }
 
     try {
+
         // Get user role
-        const q = query(collection(db, "users"), where("email", "==", user.email));
+        const q = query(
+            collection(db, "users"),
+            where("email", "==", user.email)
+        );
+
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
@@ -34,131 +49,245 @@ window.loadPage = async function(pageId) {
 
         const role = snapshot.docs[0].data().role;
 
-        // Role permissions
+
+        // =========================
+        // ROLE PERMISSIONS
+        // =========================
         if (role !== "manager") {
+
             if (pageId === "staffPage") {
                 alert("Only manager allowed");
                 return;
             }
+
         }
 
-        // Hide all pages
+
+        // =========================
+        // HIDE ALL PAGES
+        // =========================
         document.querySelectorAll(".page").forEach(p => {
             p.style.display = "none";
         });
 
-        // Show selected page
-        const page = document.getElementById(pageId);
-        if (page) page.style.display = "block";
 
-        // Load modules safely
-        if (pageId === "staffPage" && typeof loadStaff === "function") loadStaff();
-        if (pageId === "orderPage") {
-            if (typeof loadOrders === "function") loadOrders();
-            if (typeof loadRoleOrders === "function") loadRoleOrders();
+        // =========================
+        // SHOW SELECTED PAGE
+        // =========================
+        const page = document.getElementById(pageId);
+
+        if (page) {
+            page.style.display = "block";
         }
-        if (pageId === "restaurant" && typeof loadFoods === "function") loadFoods();
-        if (pageId === "drinks" && typeof loadDrinks === "function") loadDrinks();
-        if (pageId === "finance" && typeof loadFinance === "function") loadFinance();
+
+
+        // =========================
+        // LOAD MODULES
+        // =========================
+        if (pageId === "staffPage" && typeof loadStaff === "function") {
+            loadStaff();
+        }
+
+        if (pageId === "orderPage") {
+
+            if (typeof loadOrders === "function") loadOrders();
+
+            if (typeof loadRoleOrders === "function") loadRoleOrders();
+
+        }
+
+        if (pageId === "restaurant" && typeof loadFoods === "function") {
+            loadFoods();
+        }
+
+        if (pageId === "drinks" && typeof loadDrinks === "function") {
+            loadDrinks();
+        }
+
+        if (pageId === "finance" && typeof loadFinance === "function") {
+            loadFinance();
+        }
 
     } catch (error) {
+
         console.log("Page load error:", error);
+
     }
+
 };
 
+
 // =========================
-// DASHBOARD STATS
+// DASHBOARD STATISTICS
 // =========================
 async function loadDashboardStats() {
+
     try {
-        // Rooms
+
+        // =========================
+        // ROOMS
+        // =========================
         const roomsSnap = await getDocs(collection(db, "rooms"));
+
         let totalRooms = roomsSnap.size;
         let occupiedRooms = 0;
+
         roomsSnap.forEach(r => {
-            if (r.data().status === "Occupied") occupiedRooms++;
+
+            if (r.data().status === "Occupied") {
+                occupiedRooms++;
+            }
+
         });
 
-        // Foods & Drinks
+
+        // =========================
+        // FOODS
+        // =========================
         const foodSnap = await getDocs(collection(db, "foods"));
         const drinkSnap = await getDocs(collection(db, "drinks"));
 
         let totalFoods = foodSnap.size;
         let totalDrinks = drinkSnap.size;
 
-        // Today Stats (bookings & orders)
+
+        // =========================
+        // TODAY STATS
+        // =========================
         let todayRevenue = 0;
         let todayBookings = 0;
         let todayOrders = 0;
 
         const billingSnap = await getDocs(collection(db, "billing"));
-        const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+
+        const today = new Date().toISOString().split("T")[0];
+
 
         billingSnap.forEach(doc => {
+
             const data = doc.data();
-            const date = data.date ? data.date.split('T')[0] : null;
+
+            const date = data.date
+                ? data.date.split("T")[0]
+                : null;
+
             if (date === today) {
+
                 todayRevenue += data.price || 0;
-                todayBookings += data.type === "room" ? 1 : 0;
-                todayOrders += data.type === "food" || data.type === "drink" ? 1 : 0;
+
+                if (data.type === "room") {
+                    todayBookings++;
+                }
+
+                if (data.type === "food" || data.type === "drink") {
+                    todayOrders++;
+                }
+
             }
+
         });
 
-        // Update UI
-        if (document.getElementById("totalRooms")) document.getElementById("totalRooms").innerText = totalRooms;
-        if (document.getElementById("occupiedRooms")) document.getElementById("occupiedRooms").innerText = occupiedRooms;
-        if (document.getElementById("totalFoods")) document.getElementById("totalFoods").innerText = totalFoods;
-        if (document.getElementById("totalDrinks")) document.getElementById("totalDrinks").innerText = totalDrinks;
 
-        if (document.getElementById("todayRevenue")) document.getElementById("todayRevenue").innerText = "$" + todayRevenue.toFixed(2);
-        if (document.getElementById("todayBookings")) document.getElementById("todayBookings").innerText = todayBookings;
-        if (document.getElementById("todayOrders")) document.getElementById("todayOrders").innerText = todayOrders;
+        // =========================
+        // UPDATE UI
+        // =========================
+        const setText = (id, value) => {
+            const el = document.getElementById(id);
+            if (el) el.innerText = value;
+        };
 
-        // Display today's date in banner
+        setText("totalRooms", totalRooms);
+        setText("occupiedRooms", occupiedRooms);
+        setText("totalFoods", totalFoods);
+        setText("totalDrinks", totalDrinks);
+
+        setText("todayRevenue", "$" + todayRevenue.toFixed(2));
+        setText("todayBookings", todayBookings);
+        setText("todayOrders", todayOrders);
+
+
+        // =========================
+        // TODAY DATE
+        // =========================
         const todayDateEl = document.getElementById("todayDate");
+
         if (todayDateEl) {
-            const dateOptions = { weekday: "long", year: "numeric", month: "long", day: "numeric" };
-            todayDateEl.innerText = new Date().toLocaleDateString(undefined, dateOptions);
+
+            const options = {
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric"
+            };
+
+            todayDateEl.innerText =
+                new Date().toLocaleDateString(undefined, options);
+
         }
 
     } catch (err) {
+
         console.log("Dashboard stats error:", err);
+
     }
+
 }
+
+
 
 // =========================
 // LOGOUT
 // =========================
 window.logout = function() {
+
     if (confirm("Logout?")) {
+
         auth.signOut().then(() => {
+
             window.location = "index.html";
+
         });
+
     }
+
 };
+
+
+
+// =========================
+// MENU TOGGLE
+// =========================
+const dashboardMenu = document.getElementById("dashboardMenu");
+const dashboardSubmenu = document.getElementById("dashboardSubmenu");
+
+if (dashboardMenu && dashboardSubmenu) {
+
+    dashboardMenu.addEventListener("click", function (e) {
+
+        e.stopPropagation();
+
+        const visible = dashboardSubmenu.style.display === "block";
+
+        dashboardSubmenu.style.display =
+            visible ? "none" : "block";
+
+    });
+
+}
+
+
+// =========================
+// CLOSE MENU OUTSIDE CLICK
+// =========================
+document.addEventListener("click", function () {
+
+    if (dashboardSubmenu) {
+        dashboardSubmenu.style.display = "none";
+    }
+
+});
 
 // =========================
 // AUTO LOAD DASHBOARD
 // =========================
 loadDashboardStats();
-// Toggle Dashboard submenu
-const dashboardMenu = document.getElementById("dashboardMenu");
-const dashboardSubmenu = document.getElementById("dashboardSubmenu");
-
-dashboardMenu.addEventListener("click", function() {
-    const isVisible = dashboardSubmenu.style.display === "block";
-    dashboardSubmenu.style.display = isVisible ? "none" : "block";
-});
-// Collapsible Dashboard submenu
-const dashboardTitle = document.querySelector(".menuTitle");
-const dashboardSubmenu = document.querySelector(".submenu");
-
-dashboardTitle.addEventListener("click", function(e){
-    e.stopPropagation();
-    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
-});
-
-// Hide submenu if clicked outside
-document.addEventListener("click", function(){
-    dashboardSubmenu.style.display = "none";
-});
