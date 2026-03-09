@@ -8,7 +8,9 @@ import {
 collection,
 getDocs,
 doc,
-getDoc
+getDoc,
+query,
+where
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 import {
@@ -21,16 +23,14 @@ signOut
 AUTH CHECK
 =============================== */
 
-onAuthStateChanged(auth,(user)=>{
+onAuthStateChanged(auth, (user) => {
+    if (!user) {
+        window.location = "index.html";
+        return;
+    }
 
-if(!user){
-window.location = "index.html";
-return;
-}
-
-/* Load dashboard automatically */
-loadDashboardStats();
-
+    /* Load dashboard automatically */
+    loadDashboardStats();
 });
 
 
@@ -38,179 +38,158 @@ loadDashboardStats();
 PAGE LOADER
 =============================== */
 
-window.loadPage = async function(pageId){
+window.loadPage = async function(pageId) {
 
-const user = auth.currentUser;
+    const user = auth.currentUser;
 
-if(!user){
-window.location = "index.html";
-return;
-}
+    if (!user) {
+        window.location = "index.html";
+        return;
+    }
 
-try{
+    try {
 
-/* GET USER ROLE */
+        /* ===============================
+        GET USER ROLE (IMPROVED)
+        =============================== */
 
-const userRef = doc(db,"users",user.email);
-const userDoc = await getDoc(userRef);
+        const q = query(collection(db, "users"), where("email", "==", user.email));
+        const snapshot = await getDocs(q);
 
-if(!userDoc.exists()){
-alert("Access denied");
-return;
-}
+        if (snapshot.empty) {
+            alert("Access denied");
+            return;
+        }
 
-const role = userDoc.data().role;
+        const role = snapshot.docs[0].data().role;
 
+        /* ===============================
+        ROLE PERMISSIONS
+        =============================== */
 
-/* ROLE SECURITY */
+        if (role !== "manager") {
+            if (pageId === "staffPage") {
+                alert("Only manager allowed");
+                return;
+            }
+        }
 
-if(role !== "manager"){
+        /* ===============================
+        HIDE ALL PAGES
+        =============================== */
 
-if(pageId === "staffPage"){
-alert("Only manager allowed");
-return;
-}
+        document.querySelectorAll(".page").forEach(page => {
+            page.style.display = "none";
+        });
 
-}
+        /* ===============================
+        SHOW SELECTED PAGE
+        =============================== */
 
+        const selectedPage = document.getElementById(pageId);
 
-/* HIDE ALL PAGES */
+        if (selectedPage) {
+            selectedPage.style.display = "block";
+        }
 
-document.querySelectorAll(".page").forEach(page=>{
-page.style.display="none";
-});
+        /* ===============================
+        LOAD PAGE MODULES
+        =============================== */
 
+        if (pageId === "staffPage") {
+            if (typeof loadStaff === "function") {
+                loadStaff();
+            }
+        }
 
-/* SHOW SELECTED PAGE */
+        if (pageId === "orderPage") {
+            if (typeof loadOrders === "function") {
+                loadOrders();
+            }
+            if (typeof loadRoleOrders === "function") {
+                loadRoleOrders();
+            }
+        }
 
-const selectedPage = document.getElementById(pageId);
+        if (pageId === "restaurant") {
+            if (typeof loadFoods === "function") {
+                loadFoods();
+            }
+        }
 
-if(selectedPage){
-selectedPage.style.display="block";
-}
+        if (pageId === "drinks") {
+            if (typeof loadDrinks === "function") {
+                loadDrinks();
+            }
+        }
 
+        if (pageId === "finance") {
+            if (typeof loadFinance === "function") {
+                loadFinance();
+            }
+        }
 
-/* LOAD PAGE MODULES */
-
-if(pageId === "staffPage"){
-if(typeof loadStaff === "function"){
-loadStaff();
-}
-}
-
-if(pageId === "orderPage"){
-if(typeof loadOrders === "function"){
-loadOrders();
-}
-
-if(typeof loadRoleOrders === "function"){
-loadRoleOrders();
-}
-}
-
-if(pageId === "restaurant"){
-if(typeof loadFoods === "function"){
-loadFoods();
-}
-}
-
-if(pageId === "drinks"){
-if(typeof loadDrinks === "function"){
-loadDrinks();
-}
-}
-  
-if(pageId === "finance"){
-if(typeof loadFinance === "function"){
-loadFinance();
-}
-}
-}catch(error){
-
-console.log("Page load error:",error);
-
-}
+    } catch (error) {
+        console.log("Page load error:", error);
+    }
 
 };
-
 
 
 /* ===============================
 DASHBOARD STATS
 =============================== */
 
-async function loadDashboardStats(){
+async function loadDashboardStats() {
+    try {
 
-try{
+        /* ROOMS */
+        const roomsSnap = await getDocs(collection(db, "rooms"));
+        let totalRooms = roomsSnap.size;
+        let occupiedRooms = 0;
+        roomsSnap.forEach(room => {
+            if (room.data().status === "Occupied") {
+                occupiedRooms++;
+            }
+        });
 
-/* ROOMS */
+        /* FOOD */
+        const foodSnap = await getDocs(collection(db, "foods"));
+        let totalFoods = foodSnap.size;
 
-const roomsSnap = await getDocs(collection(db,"rooms"));
+        /* DRINK */
+        const drinkSnap = await getDocs(collection(db, "drinks"));
+        let totalDrinks = drinkSnap.size;
 
-let totalRooms = roomsSnap.size;
-let occupiedRooms = 0;
+        /* UPDATE UI */
+        const totalRoomsEl = document.getElementById("totalRooms");
+        const occupiedRoomsEl = document.getElementById("occupiedRooms");
+        const totalFoodsEl = document.getElementById("totalFoods");
+        const totalDrinksEl = document.getElementById("totalDrinks");
 
-roomsSnap.forEach(room=>{
-if(room.data().status === "Occupied"){
-occupiedRooms++;
+        if (totalRoomsEl) totalRoomsEl.innerText = totalRooms;
+        if (occupiedRoomsEl) occupiedRoomsEl.innerText = occupiedRooms;
+        if (totalFoodsEl) totalFoodsEl.innerText = totalFoods;
+        if (totalDrinksEl) totalDrinksEl.innerText = totalDrinks;
+
+    } catch (error) {
+        console.log("Dashboard stats error:", error);
+    }
 }
-});
-
-
-/* FOOD */
-
-const foodSnap = await getDocs(collection(db,"foods"));
-let totalFoods = foodSnap.size;
-
-
-/* DRINK */
-
-const drinkSnap = await getDocs(collection(db,"drinks"));
-let totalDrinks = drinkSnap.size;
-
-
-/* UPDATE UI */
-
-const totalRoomsEl = document.getElementById("totalRooms");
-const occupiedRoomsEl = document.getElementById("occupiedRooms");
-const totalFoodsEl = document.getElementById("totalFoods");
-const totalDrinksEl = document.getElementById("totalDrinks");
-
-if(totalRoomsEl) totalRoomsEl.innerText = totalRooms;
-if(occupiedRoomsEl) occupiedRoomsEl.innerText = occupiedRooms;
-if(totalFoodsEl) totalFoodsEl.innerText = totalFoods;
-if(totalDrinksEl) totalDrinksEl.innerText = totalDrinks;
-
-}catch(error){
-
-console.log("Dashboard stats error:",error);
-
-}
-
-}
-
 
 
 /* ===============================
 LOGOUT
 =============================== */
 
-window.logout = function(){
-
-if(confirm("Are you sure you want to logout?")){
-
-signOut(auth)
-.then(()=>{
-
-window.location="index.html";
-
-})
-.catch((error)=>{
-
-console.log("Logout error:",error);
-
-});
-
-}
-
+window.logout = function() {
+    if (confirm("Are you sure you want to logout?")) {
+        signOut(auth)
+            .then(() => {
+                window.location = "index.html";
+            })
+            .catch((error) => {
+                console.log("Logout error:", error);
+            });
+    }
 };
