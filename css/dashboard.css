@@ -94,7 +94,34 @@ LOGOUT BUTTON
     background: rgba(255, 255, 255, 0.2);
     cursor: pointer;
 }
-
+.menuItem {
+  position: relative;
+}
+.menuTitle {
+  display: block;
+  padding: 12px 20px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.menuTitle:hover {
+  background-color: #0056b3;
+}
+.submenu {
+  display: none;
+  list-style: none;
+  padding-left: 15px;
+  background-color: #e0f0ff;
+  border-left: 3px solid #007BFF;
+}
+.submenu li {
+  padding: 8px 0;
+  cursor: pointer;
+  font-weight: bold;
+  color: #007BFF;
+}
+.submenu li:hover {
+  background-color: #cce5ff;
+}
 /* =========================
 CONTENT AREA
 ========================= */
