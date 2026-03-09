@@ -119,7 +119,12 @@ if(typeof loadDrinks === "function"){
 loadDrinks();
 }
 }
-
+  
+if(pageId === "finance"){
+if(typeof loadFinance === "function"){
+loadFinance();
+}
+}
 }catch(error){
 
 console.log("Page load error:",error);
