@@ -141,3 +141,11 @@ window.logout = function() {
 // AUTO LOAD DASHBOARD
 // =========================
 loadDashboardStats();
+// Toggle Dashboard submenu
+const dashboardMenu = document.getElementById("dashboardMenu");
+const dashboardSubmenu = document.getElementById("dashboardSubmenu");
+
+dashboardMenu.addEventListener("click", function() {
+    const isVisible = dashboardSubmenu.style.display === "block";
+    dashboardSubmenu.style.display = isVisible ? "none" : "block";
+});
