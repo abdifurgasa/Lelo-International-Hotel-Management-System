@@ -129,8 +129,8 @@ window.loadPage = async function(pageId) {
             }
         }
        if(pageId === "billing"){
-          if(typeof loadBilling === "function"){
-              loadBilling();
+         if(typeof loadBilling === "function"){
+            loadBilling();
     }
 }
     } catch (error) {
