@@ -3,226 +3,244 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Lelo International Hotel System</title>
+
 <link rel="stylesheet" href="css/dashboard.css">
+
 <!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <style>
-body {
-    margin: 0;
-    font-family: 'Times New Roman', serif;
-}
-/* --- Sidebar --- */
-.sidebar {
-    width: 220px;
-    background-color: #0d6efd;
-    color: white;
-    height: 100vh;
-    position: fixed;
-}
-.sidebar h2 {
-    text-align: center;
-    margin: 20px 0;
-    font-weight: bold;
-}
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-.menuItem {
-    position: relative;
-}
-.menuTitle {
-    display: block;
-    padding: 12px 20px;
-    font-weight: bold;
-    cursor: pointer;
-}
-.menuTitle:hover {
-    background-color: #0056b3;
-}
-.submenu {
-    display: none;
-    list-style: none;
-    padding-left: 15px;
-    background-color: #e0f0ff;
-    border-left: 3px solid #007BFF;
-}
-.submenu li {
-    padding: 8px 0;
-    cursor: pointer;
-    font-weight: bold;
-    color: #007BFF;
-}
-.submenu li:hover {
-    background-color: #cce5ff;
-}
-.logoutBtn {
-    background-color: #dc3545;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    padding: 12px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-}
-.logoutBtn:hover {
-    background-color: #a71d2a;
+
+body{
+margin:0;
+font-family:'Times New Roman',serif;
 }
 
-/* --- Content --- */
-.content {
-    margin-left: 240px;
-    padding: 20px;
+/* Sidebar */
+
+.sidebar{
+width:220px;
+background:#0d6efd;
+color:white;
+height:100vh;
+position:fixed;
 }
 
-/* --- Banner --- */
-.hotelBanner {
-    background: url('https://images.unsplash.com/photo-1560347876-aeef00ee58a1') no-repeat center center/cover;
-    color: blue;
-    text-align: center;
-    padding: 40px 20px;
-    border-radius: 10px;
-    margin-bottom: 20px;
-}
-.welcomeTitle {
-    font-size: 2em;
-    font-weight: bold;
-}
-.bannerSubtitle {
-    font-size: 1.2em;
-}
-.todayDate {
-    font-size: 1em;
-    font-weight: bold;
+.sidebar h2{
+text-align:center;
+margin:20px 0;
 }
 
-/* --- Cards --- */
-.cardBox {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-.statCard {
-    flex: 1 1 200px;
-    padding: 15px;
-    border-radius: 10px;
-    text-align: center;
-    font-weight: bold;
-    color: #fff;
-}
-.totalRooms {background-color: #6c757d;}
-.occupiedRooms {background-color: #ffc107; color: #000;}
-.totalFoods {background-color: #28a745;}
-.totalDrinks {background-color: #17a2b8;}
-.totalRevenue {background-color: #343a40;}
-.roomRevenue {background-color: #6610f2;}
-.foodRevenue {background-color: #fd7e14;}
-.drinkRevenue {background-color: #20c997;}
-.statCard h3 {margin-bottom: 10px;}
-
-/* --- Card Wrap --- */
-.cardWrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-}
-.cardWrap .card {
-    width: 200px;
-    padding: 10px;
-    border-radius: 8px;
-    text-align: center;
-    font-weight: bold;
-    background-color: #e6f2ff;
-}
-.cardWrap .card img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-    border-radius: 5px;
+.sidebar ul{
+list-style:none;
+padding:0;
 }
 
-/* --- Forms --- */
-.card input, .card select, .card button {
-    width: 100%;
-    margin: 5px 0;
-    padding: 8px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
+.menuTitle{
+display:block;
+padding:12px 20px;
+font-weight:bold;
+cursor:pointer;
 }
-.card button {
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    cursor: pointer;
+
+.menuTitle:hover{
+background:#0056b3;
 }
-.card button:hover {background-color: #0056b3;}
-.passwordWrapper {position: relative;}
-.passwordWrapper span {
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    cursor: pointer;
+
+.submenu{
+display:none;
+list-style:none;
+padding-left:15px;
+background:#e0f0ff;
+border-left:3px solid #007BFF;
 }
-.page {display: none;}
+
+.submenu li{
+padding:8px 0;
+cursor:pointer;
+font-weight:bold;
+color:#007BFF;
+}
+
+.submenu li:hover{
+background:#cce5ff;
+}
+
+.logoutBtn{
+background:#dc3545;
+color:white;
+padding:12px 20px;
+text-align:center;
+margin-top:20px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.logoutBtn:hover{
+background:#a71d2a;
+}
+
+/* Content */
+
+.content{
+margin-left:240px;
+padding:20px;
+}
+
+/* Banner */
+
+.hotelBanner{
+background:url('https://images.unsplash.com/photo-1560347876-aeef00ee58a1') center/cover;
+color:blue;
+text-align:center;
+padding:40px;
+border-radius:10px;
+margin-bottom:20px;
+}
+
+.welcomeTitle{
+font-size:2em;
+font-weight:bold;
+}
+
+.bannerSubtitle{
+font-size:1.2em;
+}
+
+.todayDate{
+font-weight:bold;
+}
+
+/* Cards */
+
+.cardBox{
+display:flex;
+flex-wrap:wrap;
+gap:15px;
+margin-bottom:20px;
+}
+
+.statCard{
+flex:1 1 200px;
+padding:15px;
+border-radius:10px;
+text-align:center;
+font-weight:bold;
+color:white;
+}
+
+.totalRooms{background:#6c757d;}
+.occupiedRooms{background:#ffc107;color:black;}
+.totalFoods{background:#28a745;}
+.totalDrinks{background:#17a2b8;}
+
+.statCard h3{
+margin-bottom:10px;
+}
+
+.page{
+display:none;
+}
+
 </style>
 </head>
-<body>
+
+<body onload="loadPage('dashboard')">
 
 <!-- Sidebar -->
+
 <div class="sidebar">
-    <h2>Lelo International Hotel</h2>
-    <ul>
-        <li class="menuItem">
-            <span class="menuTitle">Dashboard</span>
-            <ul class="submenu">
-                <li onclick="loadPage('rooms')">Rooms</li>
-                <li onclick="loadPage('orderPage')">Orders</li>
-                <li onclick="loadPage('billing')">Billing</li>
-                <li onclick="loadPage('restaurant')">Restaurant</li>
-                <li onclick="loadPage('drinks')">Drinks</li>
-                <li onclick="loadPage('staffPage')">Staff Management</li>
-                <li onclick="loadPage('finance')">Finance</li>
-            </ul>
-        </li>
-        <li onclick="logout()" class="logoutBtn">Logout</li>
-    </ul>
+
+<h2>Lelo International Hotel</h2>
+
+<ul>
+
+<li>
+
+<span class="menuTitle" id="dashboardMenu">Dashboard</span>
+
+<ul class="submenu" id="dashboardSubmenu">
+
+<li onclick="loadPage('dashboard')">Dashboard Home</li>
+<li onclick="loadPage('rooms')">Rooms</li>
+<li onclick="loadPage('orderPage')">Orders</li>
+<li onclick="loadPage('billing')">Billing</li>
+<li onclick="loadPage('restaurant')">Restaurant</li>
+<li onclick="loadPage('drinks')">Drinks</li>
+<li onclick="loadPage('staffPage')">Staff Management</li>
+<li onclick="loadPage('finance')">Finance</li>
+
+</ul>
+
+</li>
+
+<li onclick="logout()" class="logoutBtn">
+Logout
+</li>
+
+</ul>
+
 </div>
+
 
 <!-- Content -->
+
 <div class="content">
-    <!-- Banner -->
-    <div class="hotelBanner">
-        <h1 class="welcomeTitle">Welcome to Lelo International Hotel System</h1>
-        <p class="bannerSubtitle">Your comfort is our priority</p>
-        <p class="todayDate" id="todayDate"></p>
-    </div>
 
-    <!-- Dashboard stats -->
-    <div id="dashboard" class="page">
-        <div class="cardBox">
-            <div class="statCard totalRooms">
-                <h3>Total Rooms</h3><p id="totalRooms">0</p>
-            </div>
-            <div class="statCard occupiedRooms">
-                <h3>Occupied Rooms</h3><p id="occupiedRooms">0</p>
-            </div>
-            <div class="statCard totalFoods">
-                <h3>Food Orders</h3><p id="totalFoods">0</p>
-            </div>
-            <div class="statCard totalDrinks">
-                <h3>Drink Orders</h3><p id="totalDrinks">0</p>
-            </div>
-        </div>
-    </div>
+<!-- Banner -->
 
-    <!-- Rooms, Orders, Restaurant, Drinks, Billing, Staff, Finance pages go here (same structure as your current HTML) -->
+<div class="hotelBanner">
+
+<h1 class="welcomeTitle">
+Welcome to Lelo International Hotel System
+</h1>
+
+<p class="bannerSubtitle">
+Your comfort is our priority
+</p>
+
+<p class="todayDate" id="todayDate"></p>
 
 </div>
 
-<!-- JS Modules -->
+
+<!-- Dashboard Stats -->
+
+<div id="dashboard" class="page">
+
+<div class="cardBox">
+
+<div class="statCard totalRooms">
+<h3>Total Rooms</h3>
+<p id="totalRooms">0</p>
+</div>
+
+<div class="statCard occupiedRooms">
+<h3>Occupied Rooms</h3>
+<p id="occupiedRooms">0</p>
+</div>
+
+<div class="statCard totalFoods">
+<h3>Food Orders</h3>
+<p id="totalFoods">0</p>
+</div>
+
+<div class="statCard totalDrinks">
+<h3>Drink Orders</h3>
+<p id="totalDrinks">0</p>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- MODULE SCRIPTS -->
+
 <script type="module" src="js/dashboard.js"></script>
 <script type="module" src="js/rooms.js"></script>
 <script type="module" src="js/order.js"></script>
@@ -233,32 +251,35 @@ body {
 <script type="module" src="js/finance.js"></script>
 <script type="module" src="js/roleDashboard.js"></script>
 
-<!-- Submenu toggle + staff password + date -->
+
+<!-- SAFE EXTRA SCRIPTS -->
+
 <script>
-const dashboardTitle = document.querySelector(".menuTitle");
-const dashboardSubmenu = document.querySelector(".submenu");
 
-dashboardTitle.addEventListener("click", function(e){
-    e.stopPropagation();
-    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
-});
-document.addEventListener("click", function(e){
-    if(!dashboardTitle.contains(e.target) && !dashboardSubmenu.contains(e.target)){
-        dashboardSubmenu.style.display = "none";
-    }
+document.getElementById("todayDate").innerText =
+new Date().toLocaleDateString();
+
+const toggleStaffPassword =
+document.getElementById("toggleStaffPassword");
+
+const staffPassword =
+document.getElementById("staffPassword");
+
+if(toggleStaffPassword && staffPassword){
+
+toggleStaffPassword.addEventListener("click",function(){
+
+const type =
+staffPassword.type === "password"
+? "text"
+: "password";
+
+staffPassword.type = type;
+
 });
 
-// Staff password toggle
-const toggleStaffPassword = document.getElementById("toggleStaffPassword");
-const staffPassword = document.getElementById("staffPassword");
-toggleStaffPassword.addEventListener("click", function(){
-    const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
-    staffPassword.setAttribute("type", type);
-    this.textContent = type === "password" ? "👁️" : "🙈";
-});
+}
 
-// Today's date
-document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
 </script>
 
 </body>
