@@ -122,35 +122,25 @@
 
 </div>
 
-
-
-<!-- ================= Restaurant ================= -->
+<!-- ================= Restaurant Page ================= -->
 <div id="restaurant" class="page" style="display:none">
 
 <h2>Restaurant Menu</h2>
 
+<!-- Add Food Form -->
 <div class="card">
-
-<h3>Add Food Item</h3>
-
-<input type="text" id="foodName" placeholder="Food Name">
-<input type="number" id="foodPrice" placeholder="Price">
-<input type="file" id="foodPhoto">
-
-<button onclick="addFood()">Add Food</button>
-
+    <h3>Add Food Item</h3>
+    <input type="text" id="foodName" placeholder="Food Name">
+    <input type="number" id="foodPrice" placeholder="Price">
+    <input type="file" id="foodPhoto">
+    <button onclick="addFood()">Add Food</button>
 </div>
 
-<div class="card">
-
+<!-- Food List Cards -->
 <h3>Food List</h3>
-
-<div id="foodMenuList" class="menuList"></div>
-
-</div>
+<div id="foodMenuList" class="cardWrap"></div>
 
 </div>
-
 
 
 <!-- ================= Drinks ================= -->
