@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lelo International Hotel System</title>
 <link rel="stylesheet" href="css/dashboard.css">
+<!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
+
 <body>
 
-<!-- ========================= SIDEBAR ========================= -->
+<!-- Sidebar -->
 <div class="sidebar">
     <h2>Lelo International Hotel</h2>
     <ul>
-        <li id="dashboardMenu">Dashboard ▼
-            <ul class="submenu" id="dashboardSubmenu">
-                <li onclick="loadPage('rooms')">Rooms</li>
-                <li onclick="loadPage('orderPage')">Orders</li>
-                <li onclick="loadPage('billing')">Billing</li>
-                <li onclick="loadPage('restaurant')">Restaurant</li>
-                <li onclick="loadPage('drinks')">Drinks</li>
-                <li onclick="loadPage('staffPage')">Staff Management</li>
-                <li onclick="loadPage('finance')">Finance</li>
-            </ul>
-        </li>
+        <li id="dashboardMenu">Dashboard</li>
+        <ul id="dashboardSubmenu" class="submenu">
+            <li onclick="loadPage('rooms')">Rooms</li>
+            <li onclick="loadPage('orderPage')">Orders</li>
+            <li onclick="loadPage('billing')">Billing</li>
+            <li onclick="loadPage('restaurant')">Restaurant</li>
+            <li onclick="loadPage('drinks')">Drinks</li>
+            <li onclick="loadPage('staffPage')">Staff Management</li>
+            <li onclick="loadPage('finance')">Finance</li>
+        </ul>
         <li onclick="logout()">Logout</li>
     </ul>
 </div>
 
-<!-- ========================= CONTENT ========================= -->
+<!-- Content Area -->
 <div class="content">
 
-<!-- ========================= HOTEL BANNER ========================= -->
+<!-- ================= HOTEL BANNER ================= -->
 <div class="hotelBanner">
     <div class="bannerOverlay">
         <h1 class="welcomeTitle">Welcome to Lelo International Hotel System</h1>
-        <p class="bannerSubtitle">Your smart hotel management dashboard</p>
+        <p class="bannerSubtitle">Your comfort is our priority</p>
         <p class="todayDate" id="todayDate"></p>
     </div>
 </div>
 
-<!-- ========================= DASHBOARD CARDS ========================= -->
+<!-- ================= Dashboard Page ================= -->
 <div id="dashboard" class="page">
     <div class="cardBox">
         <div class="statCard totalRooms">
@@ -62,7 +64,7 @@
     </div>
 </div>
 
-<!-- ========================= ROOMS ========================= -->
+<!-- ================= Rooms ================= -->
 <div id="rooms" class="page" style="display:none">
     <h2>Room Management</h2>
     <div class="card">
@@ -82,7 +84,7 @@
     <div id="roomList" class="cardWrap"></div>
 </div>
 
-<!-- ========================= ORDERS ========================= -->
+<!-- ================= Orders ================= -->
 <div id="orderPage" class="page" style="display:none">
     <h2>Orders</h2>
     <select id="orderType">
@@ -93,11 +95,11 @@
     <input type="number" id="orderPrice" placeholder="Price">
     <button onclick="addOrder()">Add Order</button>
     <h3>Order List</h3>
-    <div id="foodOrders" class="cardWrap"></div>
-    <div id="drinkOrders" class="cardWrap"></div>
+    <div id="foodOrders"></div>
+    <div id="drinkOrders"></div>
 </div>
 
-<!-- ========================= RESTAURANT ========================= -->
+<!-- ================= Restaurant ================= -->
 <div id="restaurant" class="page" style="display:none">
     <h2>Restaurant Menu</h2>
     <div class="card">
@@ -111,7 +113,7 @@
     <div id="foodMenuList" class="cardWrap"></div>
 </div>
 
-<!-- ========================= DRINKS ========================= -->
+<!-- ================= Drinks ================= -->
 <div id="drinks" class="page" style="display:none">
     <h2>Drinks Menu</h2>
     <div class="card">
@@ -125,7 +127,7 @@
     <div id="drinkMenuList" class="cardWrap"></div>
 </div>
 
-<!-- ========================= BILLING ========================= -->
+<!-- ================= Billing ================= -->
 <div id="billing" class="page" style="display:none">
     <h2>Guest Billing</h2>
     <table>
@@ -144,7 +146,7 @@
     </table>
 </div>
 
-<!-- ========================= STAFF ========================= -->
+<!-- ================= Staff ================= -->
 <div id="staffPage" class="page" style="display:none">
     <h2>Staff Management</h2>
     <div class="card">
@@ -167,29 +169,7 @@
     <div id="staffList" class="cardWrap"></div>
 </div>
 
-<script>
-// Toggle staff password
-const toggleStaffPassword = document.getElementById("toggleStaffPassword");
-const staffPassword = document.getElementById("staffPassword");
-toggleStaffPassword.addEventListener("click", function () {
-    const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
-    staffPassword.setAttribute("type", type);
-    this.textContent = type === "password" ? "👁️" : "🙈";
-});
-
-// Dashboard submenu toggle
-const dashboardMenu = document.getElementById("dashboardMenu");
-const dashboardSubmenu = document.getElementById("dashboardSubmenu");
-dashboardMenu.addEventListener("click", function(e){
-    e.stopPropagation();
-    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
-});
-
-// Show today's date
-document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
-</script>
-
-<!-- ========================= FINANCE ========================= -->
+<!-- ================= Finance ================= -->
 <div id="finance" class="page" style="display:none">
     <h2>Hotel Finance Dashboard</h2>
     <div class="cardBox">
@@ -214,7 +194,7 @@ document.getElementById("todayDate").innerText = new Date().toLocaleDateString()
     <canvas id="revenueChart"></canvas>
 </div>
 
-<!-- ========================= JS MODULES ========================= -->
+<!-- ================= SCRIPTS ================= -->
 <script type="module" src="js/dashboard.js"></script>
 <script type="module" src="js/rooms.js"></script>
 <script type="module" src="js/order.js"></script>
@@ -224,6 +204,30 @@ document.getElementById("todayDate").innerText = new Date().toLocaleDateString()
 <script type="module" src="js/staff.js"></script>
 <script type="module" src="js/finance.js"></script>
 <script type="module" src="js/roleDashboard.js"></script>
+
+<!-- Submenu Toggle Script -->
+<script>
+const dashboardMenu = document.getElementById("dashboardMenu");
+const dashboardSubmenu = document.getElementById("dashboardSubmenu");
+
+dashboardMenu.addEventListener("click", function(e){
+    e.stopPropagation();
+    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
+});
+document.addEventListener("click", function(){ dashboardSubmenu.style.display = "none"; });
+
+// Staff password toggle
+const toggleStaffPassword = document.getElementById("toggleStaffPassword");
+const staffPassword = document.getElementById("staffPassword");
+toggleStaffPassword.addEventListener("click", function () {
+    const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
+    staffPassword.setAttribute("type", type);
+    this.textContent = type === "password" ? "👁️" : "🙈";
+});
+
+// Show today’s date
+document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
+</script>
 
 </body>
 </html>
