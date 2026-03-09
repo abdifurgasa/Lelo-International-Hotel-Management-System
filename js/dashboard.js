@@ -149,3 +149,16 @@ dashboardMenu.addEventListener("click", function() {
     const isVisible = dashboardSubmenu.style.display === "block";
     dashboardSubmenu.style.display = isVisible ? "none" : "block";
 });
+// Collapsible Dashboard submenu
+const dashboardTitle = document.querySelector(".menuTitle");
+const dashboardSubmenu = document.querySelector(".submenu");
+
+dashboardTitle.addEventListener("click", function(e){
+    e.stopPropagation();
+    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
+});
+
+// Hide submenu if clicked outside
+document.addEventListener("click", function(){
+    dashboardSubmenu.style.display = "none";
+});
