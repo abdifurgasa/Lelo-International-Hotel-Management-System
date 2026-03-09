@@ -1,86 +1,48 @@
-import { auth, db } from "./firebase.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// =========================
+// PAGE LOADING
+// =========================
+function loadPage(pageId) {
+    // Hide all pages
+    document.querySelectorAll(".page").forEach(p => p.style.display = "none");
+    
+    // Show selected page
+    const page = document.getElementById(pageId);
+    if (page) page.style.display = "block";
+}
 
-document.addEventListener("DOMContentLoaded",()=>{
+// =========================
+// SUBMENU TOGGLE
+// =========================
+const dashboardTitle = document.querySelector(".menuTitle");
+const dashboardSubmenu = document.getElementById("dashboardSubmenu");
 
-    auth.onAuthStateChanged(async(user)=>{
-        if(!user){ window.location="index.html"; return; }
-
-        try{
-            const q=query(collection(db,"users"),where("email","==",user.email));
-            const snapshot=await getDocs(q);
-            if(snapshot.empty){ alert("Access denied"); return; }
-            const role=snapshot.docs[0].data().role;
-
-            // Submenu toggle
-            const dashboardTitle=document.querySelector(".menuTitle");
-            const dashboardSubmenu=document.getElementById("dashboardSubmenu");
-            dashboardTitle.addEventListener("click",e=>{
-                e.stopPropagation();
-                dashboardSubmenu.style.display=dashboardSubmenu.style.display==="block"?"none":"block";
-            });
-            document.addEventListener("click",e=>{
-                if(!dashboardTitle.contains(e.target) && !dashboardSubmenu.contains(e.target)){
-                    dashboardSubmenu.style.display="none";
-                }
-            });
-
-            // Logout
-            document.querySelector(".logoutBtn").addEventListener("click",()=>{
-                if(confirm("Logout?")) auth.signOut().then(()=>window.location="index.html");
-            });
-
-            // Load default dashboard
-            await loadPage("dashboardPage",role);
-
-        }catch(err){ console.log("Auth error:",err); }
-    });
-
+dashboardTitle.addEventListener("click", function(e){
+    e.stopPropagation();
+    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
+});
+document.addEventListener("click", function(e){
+    if(!dashboardTitle.contains(e.target) && !dashboardSubmenu.contains(e.target)){
+        dashboardSubmenu.style.display = "none";
+    }
 });
 
-async function loadPage(pageId,role="staff"){
-    document.querySelectorAll(".page").forEach(p=>p.style.display="none");
-    const managerPages=["staffPage"];
-    if(role!=="manager" && managerPages.includes(pageId)){
-        alert("Only manager allowed"); return;
+// =========================
+// LOGOUT FUNCTION
+// =========================
+function logout() {
+    if(confirm("Do you want to logout?")) {
+        alert("Logged out successfully!");
+        // Replace with your Firebase auth.signOut() if needed
+        // auth.signOut().then(() => window.location="index.html");
     }
-    const page=document.getElementById(pageId);
-    if(page) page.style.display="block";
-    if(pageId==="dashboardPage") await loadDashboardStats();
 }
 
-async function loadDashboardStats(){
-    try{
-        const roomsSnap=await getDocs(collection(db,"rooms"));
-        const totalRooms=roomsSnap.size;
-        let occupiedRooms=0;
-        roomsSnap.forEach(r=>{ if(r.data().status==="Occupied") occupiedRooms++; });
+// =========================
+// SHOW TODAY'S DATE
+// =========================
+document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
 
-        const foodsSnap=await getDocs(collection(db,"foods"));
-        const drinksSnap=await getDocs(collection(db,"drinks"));
-        const totalFoods=foodsSnap.size;
-        const totalDrinks=drinksSnap.size;
-
-        document.getElementById("totalRooms").innerText=totalRooms;
-        document.getElementById("occupiedRooms").innerText=occupiedRooms;
-        document.getElementById("totalFoods").innerText=totalFoods;
-        document.getElementById("totalDrinks").innerText=totalDrinks;
-        document.getElementById("todayDate").innerText=new Date().toLocaleDateString();
-
-        loadRevenueChart(totalRooms,totalFoods,totalDrinks);
-
-    }catch(err){ console.log("Dashboard error:",err); }
-}
-
-function loadRevenueChart(rooms,foods,drinks){
-    const ctx=document.getElementById("revenueChart");
-    if(!ctx) return;
-    new Chart(ctx,{
-        type:"bar",
-        data:{
-            labels:["Rooms","Food","Drinks"],
-            datasets:[{label:"Revenue",data:[rooms,foods,drinks],backgroundColor:["#9370DB","#BA55D3","#D8BFD8"]}]
-        },
-        options:{ responsive:true, plugins:{ legend:{ display:false } } }
-    });
-}
+// =========================
+// AUTO LOAD ROOMS PAGE BY DEFAULT
+// =========================
+loadPage('roomsPage');
