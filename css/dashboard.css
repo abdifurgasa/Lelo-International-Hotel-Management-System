@@ -1,127 +1,77 @@
 /* =========================
 GLOBAL STYLES
 ========================= */
-
 body {
     margin: 0;
     font-family: "Times New Roman", Times, serif;
-    background: #f4f4f4;
+    background: #f0f4f8;
     color: #333;
 }
 
-h1, h2, h3, h4 {
-    font-family: "Times New Roman", Times, serif;
-    font-weight: bold;
-    color: #333;
-}
-
-button {
-    cursor: pointer;
-    background: #444;
-    color: white;
-    border: none;
-    padding: 8px 14px;
-    border-radius: 6px;
-    font-weight: bold;
-    transition: 0.3s;
-}
-
-button:hover {
-    background: #222;
-}
+h1,h2,h3,h4 { font-weight: bold; }
 
 /* =========================
 SIDEBAR
 ========================= */
-
 .sidebar {
     width: 220px;
     height: 100vh;
-    background: #2c2c2c;
+    background: #eee;
     position: fixed;
     top: 0;
     left: 0;
     padding: 20px;
-    color: white;
     overflow-y: auto;
 }
-
 .sidebar h2 {
     text-align: center;
-    font-size: 22px;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+    color: #4b0082; /* dark purple */
 }
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-}
-
-.sidebar ul li {
-    padding: 12px 10px;
-    margin-bottom: 10px;
-    border-radius: 6px;
-    transition: 0.3s;
-}
-
-.sidebar ul li:hover {
-    background: #444;
-    cursor: pointer;
-}
-
-.sidebar ul li:last-child {
-    background: #b22222;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-}
-
-.sidebar ul li:last-child:hover {
-    background: #7a0000;
-}
-
-/* =========================
-MENU SUBMENU
-========================= */
-
-.menuItem {
-    position: relative;
-}
-
+.sidebar ul { list-style: none; padding: 0; }
+.sidebar ul li { padding: 10px; margin-bottom: 5px; border-radius:6px; }
 .menuTitle {
     display: block;
     padding: 12px 20px;
-    cursor: pointer;
     font-weight: bold;
+    cursor: pointer;
+    color: #4b0082; /* dark purple */
 }
+.menuTitle:hover { background-color: #ddd; color: #6a0dad; }
 
-.menuTitle:hover {
-    background: #444;
-}
-
+/* Submenu */
 .submenu {
     display: none;
     list-style: none;
     padding-left: 15px;
-    background: #eee;
-    border-left: 3px solid #999;
+    margin-top: 5px;
 }
-
 .submenu li {
-    padding: 8px 0;
-    cursor: pointer;
+    padding: 8px 5px;
+    border-radius: 4px;
     font-weight: bold;
-    color: #333;
+    color: purple; /* <-- purple letters */
+    cursor: pointer;
+}
+.submenu li:hover {
+    background-color: #e0d4ff;
 }
 
-.submenu li:hover {
-    background: #ddd;
+/* Logout */
+.logoutBtn {
+    background-color: #ff4c4c;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
 }
+.logoutBtn:hover { background-color: #cc0000; }
 
 /* =========================
 CONTENT AREA
 ========================= */
-
 .content {
     margin-left: 240px;
     padding: 20px;
@@ -130,202 +80,39 @@ CONTENT AREA
 /* =========================
 HOTEL BANNER
 ========================= */
-
-.hotelBanner {
-    width: 100%;
-    height: 180px;
+.hotelBanner{
+    width:100%;
+    height:180px;
     background-image: url("https://images.unsplash.com/photo-1566073771259-6a8506099945");
-    background-size: cover;
-    background-position: center;
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    position: relative;
+    background-size:cover;
+    background-position:center;
+    border-radius:12px;
+    overflow:hidden;
+    margin-bottom:30px;
+    position:relative;
 }
-
-.bannerOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
+.bannerOverlay{
+    position:absolute;
+    top:0; left:0;
+    width:100%; height:100%;
+    background: rgba(0,0,0,0.4);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    color:white;
+    text-align:center;
 }
-
-.welcomeTitle {
-    font-size: 32px;
-    font-weight: bold;
-    margin: 0;
-    color: #f5d76e;
-}
-
-.bannerSubtitle {
-    font-size: 18px;
-    margin-top: 8px;
-}
-
-.todayDate {
-    margin-top: 10px;
-    font-size: 14px;
-}
+.welcomeTitle{ font-size:28px; color:#4b0082; }
+.bannerSubtitle{ font-size:16px; opacity:0.9; color:#d8bfff; }
+.todayDate{ font-size:14px; opacity:0.8; color:#d8bfff; }
 
 /* =========================
-DASHBOARD CARDS
+CARDS & DASHBOARD STATS
 ========================= */
-
-.cardBox {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.statCard {
-    flex: 1 1 200px;
-    color: white;
-    padding: 20px;
-    border-radius: 12px;
-    text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: 0.3s;
-}
-
-.statCard i {
-    font-size: 28px;
-    margin-bottom: 10px;
-    display: block;
-}
-
-.statCard:hover {
-    transform: translateY(-5px);
-}
-
-/* Card colors */
-.totalRooms { background: #444; }
-.occupiedRooms { background: #2e8b57; }
-.totalFoods { background: #d2691e; }
-.totalDrinks { background: #6a5acd; }
-.totalRevenue { background: #b8860b; }
-.roomRevenue { background: #556b2f; }
-.foodRevenue { background: #8b4513; }
-.drinkRevenue { background: #483d8b; }
-
-/* =========================
-CHART CONTAINER
-========================= */
-
-.chartBox {
-    background: white;
-    padding: 20px;
-    border-radius: 10px;
-    margin-top: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-/* =========================
-ROOM / FOOD / DRINK CARDS
-========================= */
-
-.cardWrap {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    margin-top: 20px;
-}
-
-.cardItem {
-    width: 180px;
-    border-radius: 12px;
-    overflow: hidden;
-    text-align: center;
-    cursor: pointer;
-    box-shadow: 0px 4px 10px rgba(0,0,0,0.2);
-    transition: 0.3s;
-    background: white;
-}
-
-.cardItem img {
-    width: 100%;
-    height: 120px;
-    object-fit: cover;
-}
-
-.cardItem h4 {
-    margin: 10px 0 5px 0;
-}
-
-.cardItem p {
-    margin: 0 0 10px 0;
-}
-
-.cardItem:hover {
-    transform: translateY(-5px);
-    box-shadow: 0px 8px 15px rgba(0,0,0,0.3);
-}
-
-/* =========================
-FORMS
-========================= */
-
-input, select {
-    width: calc(100% - 12px);
-    padding: 6px;
-    margin: 6px 0;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-    font-family: "Times New Roman", Times, serif;
-}
-
-/* Password toggle */
-
-.passwordWrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.passwordWrapper input {
-    flex: 1;
-    padding-right: 30px;
-}
-
-.passwordWrapper span {
-    position: absolute;
-    right: 8px;
-    cursor: pointer;
-    font-size: 18px;
-}
-
-/* =========================
-TABLES
-========================= */
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-}
-
-table th, table td {
-    padding: 8px;
-    border: 1px solid #ccc;
-    text-align: center;
-}
-
-table th {
-    background: #444;
-    color: white;
-}
-
-table tr:nth-child(even) {
-    background: #f2f2f2;
-}
+.cardBox { display:flex; flex-wrap:wrap; gap:15px; margin-top:20px; }
+.statCard { flex:1 1 200px; padding:20px; border-radius:12px; text-align:center; font-weight:bold; color:white; }
+.statCard.totalRooms { background: #9370DB; }       /* purple shades */
+.statCard.occupiedRooms { background: #8A2BE2; }
+.statCard.totalFoods { background: #BA55D3; }
+.statCard.totalDrinks { background: #D8BFD8; }
