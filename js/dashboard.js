@@ -1,5 +1,5 @@
 /* =========================
-PAGE SWITCHING
+PAGE SWITCH SYSTEM
 ========================= */
 
 window.loadPage = function(pageId){
@@ -10,17 +10,20 @@ pages.forEach(function(page){
 page.style.display = "none";
 });
 
-const selectedPage = document.getElementById(pageId);
+const page = document.getElementById(pageId);
 
-if(selectedPage){
-selectedPage.style.display = "block";
+if(page){
+page.style.display = "block";
 }
 
 };
 
+
 /* =========================
-COLLAPSIBLE DASHBOARD MENU
+DASHBOARD MENU TOGGLE
 ========================= */
+
+document.addEventListener("DOMContentLoaded", function(){
 
 const dashboardToggle = document.getElementById("dashboardToggle");
 const dashboardMenu = document.getElementById("dashboardMenu");
@@ -55,12 +58,9 @@ if(toggleStaffPassword){
 
 toggleStaffPassword.addEventListener("click", function(){
 
-const type =
-staffPassword.getAttribute("type") === "password"
-? "text"
-: "password";
+const type = staffPassword.type === "password" ? "text" : "password";
 
-staffPassword.setAttribute("type", type);
+staffPassword.type = type;
 
 this.textContent = type === "password" ? "👁️" : "🙈";
 
@@ -70,16 +70,16 @@ this.textContent = type === "password" ? "👁️" : "🙈";
 
 
 /* =========================
-TODAY DATE FOR BANNER
+TODAY DATE
 ========================= */
 
-const todayDateElement = document.getElementById("todayDate");
+const todayDate = document.getElementById("todayDate");
 
-if(todayDateElement){
+if(todayDate){
 
 const today = new Date();
 
-todayDateElement.innerText =
+todayDate.innerText =
 today.toLocaleDateString(undefined,{
 weekday:"long",
 year:"numeric",
@@ -91,26 +91,26 @@ day:"numeric"
 
 
 /* =========================
-LOGOUT
+DEFAULT PAGE
 ========================= */
-
-window.logout = function(){
-
-localStorage.removeItem("leloUser");
-
-alert("You have logged out successfully.");
-
-window.location.href = "login.html";
-
-};
-
-
-/* =========================
-DEFAULT PAGE LOAD
-========================= */
-
-document.addEventListener("DOMContentLoaded", function(){
 
 loadPage("dashboard");
 
 });
+
+
+/* =========================
+LOGOUT FUNCTION
+========================= */
+
+function logout(){
+
+localStorage.clear();
+
+alert("Logout successful");
+
+window.location.href = "login.html";
+
+}
+
+window.logout = logout;
