@@ -1,72 +1,108 @@
-let rooms = JSON.parse(localStorage.getItem("rooms")) || [];
+import { db } from "./firebase.js";
+import {
+collection,
+addDoc,
+getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const table = document.getElementById("roomTable");
 
+/* ===============================
+LOAD ROOM LIST
+=============================== */
 
-function addRoom(){
+window.loadRooms = async function() {
 
-let number = document.getElementById("roomNumber").value;
-let type = document.getElementById("roomType").value;
-let price = document.getElementById("roomPrice").value;
+    const roomTable = document.getElementById("roomTable");
+    if (!roomTable) return;
 
-let photoInput = document.getElementById("roomPhoto");
-let photo = photoInput.files[0];
+    roomTable.innerHTML = ""; // clear table
 
-let reader = new FileReader();
+    try {
+        const roomsSnap = await getDocs(collection(db, "rooms"));
+        roomsSnap.forEach(doc => {
+            const room = doc.data();
+            const tr = document.createElement("tr");
 
-reader.onload = function(){
-
-let room = {
-
-number:number,
-type:type,
-price:price,
-status:"Available",
-photo:reader.result
-
+            tr.innerHTML = `
+                <td>${room.photo ? `<img src="${room.photo}" width="50">` : ""}</td>
+                <td>${room.number}</td>
+                <td>${room.type}</td>
+                <td>${room.price}</td>
+                <td>${room.status || "Available"}</td>
+            `;
+            roomTable.appendChild(tr);
+        });
+    } catch (error) {
+        console.log("Load rooms error:", error);
+    }
 };
 
-rooms.push(room);
 
-localStorage.setItem("rooms",JSON.stringify(rooms));
+/* ===============================
+ADD ROOM
+=============================== */
 
-displayRooms();
+window.addRoom = async function() {
 
+    const number = document.getElementById("roomNumber").value.trim();
+    const type = document.getElementById("roomType").value;
+    const price = document.getElementById("roomPrice").value;
+    const photoInput = document.getElementById("roomPhoto");
+
+    if (!number || !type || !price) {
+        alert("Please fill all fields");
+        return;
+    }
+
+    /* Optional: convert photo to base64 */
+    let photoUrl = "";
+    if (photoInput && photoInput.files.length > 0) {
+        const file = photoInput.files[0];
+        photoUrl = await toBase64(file);
+    }
+
+    try {
+        await addDoc(collection(db, "rooms"), {
+            number: number,
+            type: type,
+            price: Number(price),
+            photo: photoUrl,
+            status: "Available"
+        });
+
+        alert("Room added successfully!");
+
+        // Clear input
+        document.getElementById("roomNumber").value = "";
+        document.getElementById("roomPrice").value = "";
+        photoInput.value = "";
+
+        // Reload room list
+        loadRooms();
+
+    } catch (error) {
+        console.log("Add room error:", error);
+        alert("Failed to add room");
+    }
 };
 
-if(photo){
-reader.readAsDataURL(photo);
+
+/* ===============================
+HELPER: convert file to Base64
+=============================== */
+
+function toBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+    });
 }
 
-}
 
+/* ===============================
+AUTO LOAD ROOM LIST
+=============================== */
 
-function displayRooms(){
-
-table.innerHTML="";
-
-rooms.forEach(function(room){
-
-table.innerHTML += `
-
-<tr>
-
-<td><img src="${room.photo}" width="60"></td>
-
-<td>${room.number}</td>
-
-<td>${room.type}</td>
-
-<td>${room.price}</td>
-
-<td>${room.status}</td>
-
-</tr>
-
-`;
-
-});
-
-}
-
-displayRooms();
+loadRooms();
