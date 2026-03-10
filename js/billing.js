@@ -1,55 +1,67 @@
-// billing.js
-import { db } from "./firebase.js";
-import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { loadFinance, updateFinance } from "./finance.js";
+// js/billing.js
+import { db, auth } from "./firebase.js"; // your firebase config file
+import { setLanguage } from "./i18n.js";
 
-const billingListEl = document.getElementById("billingList");
+// ==================== BILLING ====================
+const billingList = document.getElementById("billingList");
 
-// Load all bills
-export async function loadBilling() {
-    billingListEl.innerHTML = "";
-    const snapshot = await getDocs(collection(db, "billing"));
-    snapshot.forEach(docSnap => {
-        const bill = docSnap.data();
+// Example: store bills in memory (or fetch from Firebase)
+let bills = []; // each bill: {id, guest, type, price, status, paymentMethod}
+
+// ==================== ADD BILL ====================
+export function addBill(guest, type, price, paymentMethod) {
+    const id = Date.now();
+    const bill = {
+        id,
+        guest,
+        type,
+        price,
+        status: "Pending",
+        paymentMethod
+    };
+    bills.push(bill);
+    renderBills();
+    // TODO: save to Firebase under guest user
+}
+
+// ==================== RENDER BILLS ====================
+function renderBills() {
+    billingList.innerHTML = "";
+    bills.forEach(bill => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-            <td>${bill.user}</td>
-            <td>${bill.item}</td>
-            <td>${bill.type}</td>
-            <td>$${bill.price}</td>
-            <td>${bill.status}</td>
+            <td>${bill.guest}</td>
+            <td data-i18n="type">${bill.type}</td>
+            <td data-i18n="price">${bill.price}</td>
+            <td data-i18n="status">${bill.status}</td>
+            <td>${bill.paymentMethod}</td>
             <td>
-                <select id="paymentMethod_${docSnap.id}">
-                    <option value="">Select</option>
-                    <option value="Cash">Cash</option>
-                    <option value="Transfer">Transfer</option>
-                </select>
-            </td>
-            <td>
-                <button onclick="payBill('${docSnap.id}', ${bill.price})">Pay</button>
+                ${bill.status === "Pending" ? `<button onclick="payBill(${bill.id})" data-i18n="pay">Pay</button>` : ""}
+                <button onclick="deleteBill(${bill.id})">Delete</button>
             </td>
         `;
-        billingListEl.appendChild(tr);
+        billingList.appendChild(tr);
     });
+    setLanguage(document.getElementById("langSelect").value); // update i18n
 }
 
-// Pay a bill
-export async function payBill(billId, amount) {
-    const selectEl = document.getElementById(`paymentMethod_${billId}`);
-    const method = selectEl.value;
-    if (!method) return alert("Please select payment method");
+// ==================== PAY BILL ====================
+window.payBill = function(id) {
+    const bill = bills.find(b => b.id === id);
+    if (!bill) return;
 
-    const billRef = doc(db, "billing", billId);
+    bill.status = "Paid";
 
-    // Update bill status and payment method
-    await updateDoc(billRef, {
-        status: "Paid",
-        paymentMethod: method
-    });
-
-    // Update Finance module
-    await updateFinance(amount, method);
-
-    alert("Bill paid! Finance updated.");
-    loadBilling();
+    // TODO: update guest user balance in Firebase
+    // TODO: add amount to finance revenue
+    renderBills();
 }
+
+// ==================== DELETE BILL ====================
+window.deleteBill = function(id) {
+    bills = bills.filter(b => b.id !== id);
+    renderBills();
+}
+
+// ==================== INITIAL LOAD ====================
+renderBills();
