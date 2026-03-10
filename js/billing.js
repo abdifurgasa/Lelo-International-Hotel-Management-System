@@ -1,33 +1,49 @@
 // js/billing.js
-import { db, auth } from "./firebase.js"; // your firebase config file
+import { db } from "./firebase.js"; // your firebase config
 import { setLanguage } from "./i18n.js";
 
-// ==================== BILLING ====================
+// DOM Elements
 const billingList = document.getElementById("billingList");
+const addBillForm = document.getElementById("addBillForm"); // assume a form in HTML
+const guestSelect = document.getElementById("guestSelect"); // select guest user
+const billType = document.getElementById("billType");
+const billPrice = document.getElementById("billPrice");
+const billPayment = document.getElementById("billPayment"); // Cash / Transfer
 
-// Example: store bills in memory (or fetch from Firebase)
-let bills = []; // each bill: {id, guest, type, price, status, paymentMethod}
+// Add bill
+export async function addBill() {
+    const guest = guestSelect.value;
+    const type = billType.value;
+    const price = parseFloat(billPrice.value);
+    const paymentMethod = billPayment.value;
 
-// ==================== ADD BILL ====================
-export function addBill(guest, type, price, paymentMethod) {
+    if (!guest || !type || !price) return alert("All fields are required");
+
     const id = Date.now();
-    const bill = {
+
+    const billData = {
         id,
         guest,
         type,
         price,
         status: "Pending",
-        paymentMethod
+        paymentMethod,
+        createdAt: new Date().toISOString()
     };
-    bills.push(bill);
+
+    // Save to Firebase under bills collection
+    await db.collection("bills").doc(id.toString()).set(billData);
+
     renderBills();
-    // TODO: save to Firebase under guest user
 }
 
-// ==================== RENDER BILLS ====================
-function renderBills() {
+// Render bills
+export async function renderBills() {
+    const snapshot = await db.collection("bills").get();
     billingList.innerHTML = "";
-    bills.forEach(bill => {
+
+    snapshot.forEach(doc => {
+        const bill = doc.data();
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${bill.guest}</td>
@@ -36,32 +52,52 @@ function renderBills() {
             <td data-i18n="status">${bill.status}</td>
             <td>${bill.paymentMethod}</td>
             <td>
-                ${bill.status === "Pending" ? `<button onclick="payBill(${bill.id})" data-i18n="pay">Pay</button>` : ""}
-                <button onclick="deleteBill(${bill.id})">Delete</button>
+                ${bill.status === "Pending" ? `<button onclick="payBill('${bill.id}')" data-i18n="pay">Pay</button>` : ""}
+                <button onclick="deleteBill('${bill.id}')">Delete</button>
             </td>
         `;
         billingList.appendChild(tr);
     });
-    setLanguage(document.getElementById("langSelect").value); // update i18n
+
+    // Update i18n labels
+    setLanguage(document.getElementById("langSelect").value);
 }
 
-// ==================== PAY BILL ====================
-window.payBill = function(id) {
-    const bill = bills.find(b => b.id === id);
-    if (!bill) return;
+// Pay bill
+window.payBill = async function(id) {
+    const billRef = db.collection("bills").doc(id);
+    const billSnap = await billRef.get();
+    if (!billSnap.exists) return;
 
-    bill.status = "Paid";
+    const bill = billSnap.data();
 
-    // TODO: update guest user balance in Firebase
-    // TODO: add amount to finance revenue
+    // Update bill status
+    await billRef.update({ status: "Paid", paidAt: new Date().toISOString() });
+
+    // Update guest service user balance
+    const userRef = db.collection("users").doc(bill.guest);
+    await db.runTransaction(async (transaction) => {
+        const userSnap = await transaction.get(userRef);
+        const oldBalance = userSnap.data().balance || 0;
+        transaction.update(userRef, { balance: oldBalance - bill.price });
+    });
+
+    // Update finance revenue
+    const financeRef = db.collection("finance").doc("revenue");
+    await db.runTransaction(async (transaction) => {
+        const financeSnap = await transaction.get(financeRef);
+        const oldRevenue = financeSnap.exists ? financeSnap.data().total : 0;
+        transaction.set(financeRef, { total: oldRevenue + bill.price }, { merge: true });
+    });
+
     renderBills();
 }
 
-// ==================== DELETE BILL ====================
-window.deleteBill = function(id) {
-    bills = bills.filter(b => b.id !== id);
+// Delete bill
+window.deleteBill = async function(id) {
+    await db.collection("bills").doc(id).delete();
     renderBills();
 }
 
-// ==================== INITIAL LOAD ====================
+// Initial load
 renderBills();
