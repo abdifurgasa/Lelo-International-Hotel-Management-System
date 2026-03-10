@@ -16,8 +16,7 @@ export async function addStaff() {
         email,
         password,
         role,
-        fullName,
-        photoURL: email.split("@")[0] // simple example for full name
+        fullName: email.split("@")[0] // simple example for full name
     });
 
     alert("Staff added!");
