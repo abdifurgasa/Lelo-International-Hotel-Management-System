@@ -1,73 +1,70 @@
 // rooms.js
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { updateFinance } from "./finance.js"; // import finance
+import { collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { addBill } from "./billingHelper.js"; // helper function to add bill to guest service
 
 const roomListEl = document.getElementById("roomList");
 
+// Add Room
 export async function addRoom() {
     const number = document.getElementById("roomNumber").value;
     const type = document.getElementById("roomType").value;
     const price = parseFloat(document.getElementById("roomPrice").value);
     const photo = document.getElementById("roomPhoto").files[0];
 
-    if(!number || !type || !price || !photo) return alert("Fill all fields");
+    if (!number || !type || !price || !photo) return alert("Fill all fields");
 
-    // Upload photo to Firebase Storage (optional, simplified as URL for now)
     const photoURL = URL.createObjectURL(photo);
 
     await addDoc(collection(db, "rooms"), {
-        number, type, price, photoURL, status: "Available"
+        number,
+        type,
+        price,
+        photoURL,
+        status: "Available"
     });
 
     loadRooms();
 }
 
-// Load all rooms
+// Load Rooms
 export async function loadRooms() {
     roomListEl.innerHTML = "";
     const snapshot = await getDocs(collection(db, "rooms"));
     snapshot.forEach(docSnap => {
-        const data = docSnap.data();
+        const room = docSnap.data();
         const card = document.createElement("div");
         card.className = "cardItem";
         card.innerHTML = `
-            <img src="${data.photoURL}" alt="${data.type}">
-            <h4>${data.type} - ${data.number}</h4>
-            <p>Price: $${data.price}</p>
-            <p>Status: ${data.status}</p>
+            <img src="${room.photoURL}" alt="Room ${room.number}">
+            <h4>Room ${room.number}</h4>
+            <p>Type: ${room.type}</p>
+            <p>Price: $${room.price}</p>
+            <p>Status: ${room.status}</p>
         `;
         // Click to book
-        card.addEventListener("click", () => bookRoom(docSnap.id, data));
+        card.addEventListener("click", () => bookRoom(docSnap.id, room));
         roomListEl.appendChild(card);
     });
 }
 
-// Book room function
-async function bookRoom(id, room) {
-    if(room.status === "Occupied") return alert("Room already booked");
+// Book Room
+async function bookRoom(roomId, room) {
+    if (room.status === "Occupied") return alert("Room is already occupied!");
 
-    const confirmBooking = confirm(`Book ${room.type} Room #${room.number} for $${room.price}?`);
-    if(!confirmBooking) return;
+    // Get check-in and check-out dates
+    const checkIn = prompt("Enter Check-in date (YYYY-MM-DD):");
+    const checkOut = prompt("Enter Check-out date (YYYY-MM-DD):");
+    if (!checkIn || !checkOut) return;
 
-    // Add to Guest Service billing
-    const guestUser = "guest_service"; // your guest services user id/email
-    await addDoc(collection(db, "billing"), {
-        user: guestUser,
-        item: `${room.type} Room #${room.number}`,
-        type: "room",
-        price: room.price,
-        status: "Pending",
-        paymentMethod: "",
-        timestamp: new Date()
-    });
+    // Add billing to Guest Service
+    await addBill("guest_service", `Room ${room.number}`, "room", room.price);
 
-    // Mark room as occupied
-    const roomRef = doc(db, "rooms", id);
+    alert(`Room ${room.number} booked from ${checkIn} to ${checkOut}. Bill added to Guest Service.`);
+
+    // Optionally: Update room status
+    const roomRef = doc(db, "rooms", roomId);
     await updateDoc(roomRef, { status: "Occupied" });
 
-    alert("Room booked! Added to Guest Service Billing.");
-
-    // Reload rooms
     loadRooms();
 }
