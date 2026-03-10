@@ -3,48 +3,55 @@ import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/1
 import { setLanguage } from "./i18n.js";
 
 const loginBtn = document.getElementById("loginBtn");
-const togglePassword = document.getElementById("togglePassword");
 const passwordInput = document.getElementById("password");
+const togglePassword = document.getElementById("togglePassword");
 const languageSelect = document.getElementById("languageSelect");
 const errorMsg = document.getElementById("errorMsg");
 
-// language switch
-languageSelect.addEventListener("change", () => {
-    setLanguage(languageSelect.value);
+
+// language change
+languageSelect.addEventListener("change",()=>{
+
+setLanguage(languageSelect.value);
+
 });
+
 
 // password toggle
-togglePassword.addEventListener("click", () => {
+togglePassword.addEventListener("click",()=>{
 
-    const type = passwordInput.type === "password" ? "text" : "password";
-    passwordInput.type = type;
+const type = passwordInput.type === "password" ? "text" : "password";
+passwordInput.type = type;
 
-    togglePassword.textContent = type === "password" ? "👁️" : "🙈";
+togglePassword.textContent = type === "password" ? "👁️" : "🙈";
 
 });
 
+
 // login
-loginBtn.addEventListener("click", async () => {
+loginBtn.addEventListener("click",async ()=>{
 
-    const email = document.getElementById("email").value;
-    const password = passwordInput.value;
+const email = document.getElementById("email").value;
+const password = passwordInput.value;
 
-    if(!email || !password){
-        errorMsg.textContent = "Enter email and password";
-        return;
-    }
+if(!email || !password){
 
-    try{
+errorMsg.textContent = "Enter email and password";
+return;
 
-        await signInWithEmailAndPassword(auth,email,password);
+}
 
-        window.location.href = "dashboard.html";
+try{
 
-    }catch(err){
+await signInWithEmailAndPassword(auth,email,password);
 
-        errorMsg.textContent = "Login failed";
-        console.error(err);
+window.location.href="dashboard.html";
 
-    }
+}catch(err){
+
+errorMsg.textContent="Login failed";
+console.error(err);
+
+}
 
 });
