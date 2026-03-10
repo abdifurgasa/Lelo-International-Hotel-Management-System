@@ -1,21 +1,34 @@
-import { en } from "./en.js";
-import { am } from "./am.js";
-import { om } from "./om.js";
+import { en } from "./lang/en.js";
+import { am } from "./lang/am.js";
 
-const languages = { en, am, om };
+const languages = {
+en,
+am
+};
 
-export function setLanguage(lang){
+window.changeLanguage = function(lang){
 
-    const dict = languages[lang];
+const text = languages[lang];
 
-    document.querySelectorAll("[data-lang]").forEach(el => {
+document.querySelectorAll("[data-lang]").forEach(el => {
 
-        const key = el.dataset.lang;
+const key = el.getAttribute("data-lang");
 
-        if(dict[key]){
-            el.innerText = dict[key];
-        }
-
-    });
-
+if(text[key]){
+el.innerText = text[key];
 }
+
+});
+
+localStorage.setItem("language",lang);
+
+};
+
+
+window.onload = function(){
+
+const saved = localStorage.getItem("language") || "en";
+
+changeLanguage(saved);
+
+};
