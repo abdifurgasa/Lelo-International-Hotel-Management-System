@@ -10,7 +10,7 @@
 
 <div class="loginContainer">
   <div class="loginBox">
-    <h1 id="loginTitle">Login</h1>
+   <h1 id="loginTitle" data-i18n="login">Login</h1> 
 
     <!-- Language Selection -->
     <select id="languageSelect">
