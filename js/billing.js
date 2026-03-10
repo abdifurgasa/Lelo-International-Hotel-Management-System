@@ -1,101 +1,54 @@
 // billing.js
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, updateDoc, doc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { updateFinance } from "./finance.js"; // function to update finance totals
+import { collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { updateFinance } from "./finance.js"; // finance updates
 
-const billingList = document.getElementById("billingList");
+const billingListEl = document.getElementById("billingList");
 
-/**
- * Add item to Guest Service bill
- * @param {string} userEmail - Email of Guest Service
- * @param {object} item - { type, name, price, id }
- */
-export async function addToBill(userEmail, item) {
-    try {
-        await addDoc(collection(db, "bills"), {
-            user: userEmail,
-            itemType: item.type,
-            itemName: item.name,
-            price: item.price,
-            status: "Pending",
-            paymentMethod: null,
-            timestamp: serverTimestamp()
-        });
-        loadBills(userEmail);
-    } catch (error) {
-        console.error("Error adding bill: ", error);
-    }
-}
-
-/**
- * Load bills for a specific user
- * @param {string} userEmail
- */
-export async function loadBills(userEmail = "guestService@example.com") {
-    billingList.innerHTML = "";
-    const snapshot = await getDocs(collection(db, "bills"));
-    snapshot.forEach(docSnap => {
-        const bill = docSnap.data();
-        if (bill.user === userEmail) {
-            const tr = document.createElement("tr");
-            tr.innerHTML = `
-                <td>${bill.user}</td>
-                <td>${bill.itemName}</td>
-                <td>${bill.itemType}</td>
-                <td>$${bill.price}</td>
-                <td>${bill.status}</td>
-                <td>
-                    <select onchange="payBill('${docSnap.id}', this.value)">
-                        <option value="">Select</option>
-                        <option value="Cash">Cash</option>
-                        <option value="Transfer">Transfer</option>
-                    </select>
-                </td>
-                <td>
-                    <button onclick="deleteBill('${docSnap.id}')">Delete</button>
-                </td>
-            `;
-            billingList.appendChild(tr);
-        }
+// Load all bills
+export async function loadBilling() {
+    billingListEl.innerHTML = "";
+    const snapshot = await getDocs(collection(db, "billing"));
+    snapshot.forEach(async (docSnap) => {
+        const data = docSnap.data();
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${data.user}</td>
+            <td>${data.item}</td>
+            <td>${data.type}</td>
+            <td>$${data.price}</td>
+            <td>${data.status}</td>
+            <td>
+                <select id="paymentMethod_${docSnap.id}">
+                    <option value="">Select</option>
+                    <option value="Cash">Cash</option>
+                    <option value="Transfer">Transfer</option>
+                </select>
+            </td>
+            <td>
+                <button onclick="payBill('${docSnap.id}', ${data.price})">Pay</button>
+            </td>
+        `;
+        billingListEl.appendChild(tr);
     });
 }
 
-/**
- * Pay a bill
- * @param {string} billId
- * @param {string} method - Cash or Transfer
- */
-window.payBill = async function(billId, method) {
-    if(!method) return;
-    try {
-        const billRef = doc(db, "bills", billId);
-        await updateDoc(billRef, {
-            status: "Paid",
-            paymentMethod: method
-        });
-        alert(`Bill marked as Paid via ${method}`);
-        // Update Finance
-        const billSnap = await getDocs(billRef);
-        const billData = (await billSnap.get()).data();
-        updateFinance(billData.price, billData.itemType); // call finance update
-        loadBills(); // refresh
-    } catch (error) {
-        console.error("Error paying bill: ", error);
-    }
-}
+// Pay a bill
+export async function payBill(billId, amount) {
+    const selectEl = document.getElementById(`paymentMethod_${billId}`);
+    const method = selectEl.value;
+    if (!method) return alert("Please select payment method");
 
-/**
- * Delete a bill
- * @param {string} billId
- */
-window.deleteBill = async function(billId) {
-    try {
-        const billRef = doc(db, "bills", billId);
-        await updateDoc(billRef, {
-            status: "Deleted"
-        });
-        loadBills();
-    } catch (error) {
-        console.error("Error deleting bill: ", error);
-    }
+    // Update bill status to Paid
+    const billRef = doc(db, "billing", billId);
+    await updateDoc(billRef, {
+        status: "Paid",
+        paymentMethod: method
+    });
+
+    // Update finance
+    await updateFinance(amount, method);
+
+    alert("Bill paid and Finance updated!");
+    loadBilling();
 }
