@@ -1,285 +1,194 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Lelo International Hotel System</title>
-
 <link rel="stylesheet" href="css/dashboard.css">
-
-<!-- Chart JS -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 </head>
 
 <body>
 
 <!-- ================= SIDEBAR ================= -->
-
 <div class="sidebar">
-
-<h2>Lelo International Hotel</h2>
-
-<ul>
-
-<li class="menuItem">
-
-<span class="menuTitle" id="dashboardToggle">Dashboard</span>
-
-<ul class="submenu" id="dashboardMenu">
-
-<li onclick="loadPage('dashboard')">Home</li>
-<li onclick="loadPage('rooms')">Rooms</li>
-<li onclick="loadPage('orderPage')">Orders</li>
-<li onclick="loadPage('billing')">Billing</li>
-<li onclick="loadPage('restaurant')">Restaurant</li>
-<li onclick="loadPage('drinks')">Drinks</li>
-<li onclick="loadPage('staffPage')">Staff Management</li>
-<li onclick="loadPage('finance')">Finance</li>
-
-</ul>
-
-</li>
-
-<li class="logoutBtn" onclick="logout()">Logout</li>
-
-</ul>
-
+    <h2 style="color:red;">Lelo International Hotel</h2>
+    <ul>
+        <li class="menuItem">
+            <span class="menuTitle" style="color:purple;">Dashboard</span>
+            <ul class="submenu">
+                <li onclick="loadPage('rooms')" style="color:darkgreen;">Rooms</li>
+                <li onclick="loadPage('restaurant')" style="color:darkgreen;">Restaurant</li>
+                <li onclick="loadPage('drinks')" style="color:darkgreen;">Drinks</li>
+                <li onclick="loadPage('billing')" style="color:darkgreen;">Billing</li>
+                <li onclick="loadPage('finance')" style="color:darkgreen;">Finance</li>
+            </ul>
+        </li>
+        <li onclick="logout()" class="logoutBtn">Logout</li>
+    </ul>
 </div>
-
 
 <!-- ================= CONTENT ================= -->
-
 <div class="content">
 
-
-<!-- HOTEL BANNER -->
-
+<!-- Hotel Banner -->
 <div class="hotelBanner">
-
-<div class="bannerOverlay">
-
-<h1 class="welcomeTitle">Welcome to Lelo International Hotel System</h1>
-
-<p class="bannerSubtitle">Your comfort is our priority</p>
-
-<p id="todayDate" class="todayDate"></p>
-
+    <div class="bannerOverlay">
+        <h1 class="welcomeTitle">Welcome to Lelo International Hotel</h1>
+        <p class="bannerSubtitle">Your comfort is our priority</p>
+        <p class="todayDate" id="todayDate"></p>
+    </div>
 </div>
 
-</div>
-
-
-<!-- ================= DASHBOARD ================= -->
-
+<!-- Dashboard Stats Cards -->
 <div id="dashboard" class="page">
-
-<div class="cardBox">
-
-<div class="statCard totalRooms">
-<h3>Total Rooms</h3>
-<p id="totalRooms">0</p>
+    <div class="cardBox">
+        <div class="statCard totalRooms"><h3>Total Rooms</h3><p id="totalRooms">0</p></div>
+        <div class="statCard occupiedRooms"><h3>Occupied Rooms</h3><p id="occupiedRooms">0</p></div>
+        <div class="statCard totalFoods"><h3>Today Orders</h3><p id="totalFoods">0</p></div>
+        <div class="statCard totalRevenue"><h3>Today Revenue</h3><p id="totalRevenue">0</p></div>
+    </div>
 </div>
-
-<div class="statCard occupiedRooms">
-<h3>Occupied Rooms</h3>
-<p id="occupiedRooms">0</p>
-</div>
-
-<div class="statCard totalFoods">
-<h3>Food Orders</h3>
-<p id="totalFoods">0</p>
-</div>
-
-<div class="statCard totalDrinks">
-<h3>Drink Orders</h3>
-<p id="totalDrinks">0</p>
-</div>
-
-</div>
-
-</div>
-
 
 <!-- ================= ROOMS ================= -->
-
 <div id="rooms" class="page" style="display:none">
-
-<h2>Room Management</h2>
-
-<div class="card">
-
-<h3>Add Room</h3>
-
-<input type="text" id="roomNumber" placeholder="Room Number">
-
-<select id="roomType">
-<option>Single</option>
-<option>Double</option>
-<option>Deluxe</option>
-<option>VIP</option>
-</select>
-
-<input type="number" id="roomPrice" placeholder="Room Price">
-
-<input type="file" id="roomPhoto">
-
-<button onclick="addRoom()">Add Room</button>
-
+    <h2>Room Management</h2>
+    <div class="card">
+        <h3>Add Room</h3>
+        <input type="text" id="roomNumber" placeholder="Room Number">
+        <select id="roomType">
+            <option>Single</option>
+            <option>Double</option>
+            <option>Deluxe</option>
+            <option>VIP</option>
+        </select>
+        <input type="number" id="roomPrice" placeholder="Room Price">
+        <input type="file" id="roomPhoto">
+        <button onclick="addRoom()">Add Room</button>
+    </div>
+    <h3>Available Rooms</h3>
+    <div id="roomList" class="cardWrap"></div>
 </div>
-
-<h3>Available Rooms</h3>
-
-<div id="roomList" class="cardWrap"></div>
-
-</div>
-
 
 <!-- ================= RESTAURANT ================= -->
-
 <div id="restaurant" class="page" style="display:none">
-
-<h2>Restaurant Menu</h2>
-
-<div class="card">
-
-<h3>Add Food Item</h3>
-
-<input type="text" id="foodName" placeholder="Food Name">
-
-<input type="number" id="foodPrice" placeholder="Price">
-
-<input type="file" id="foodPhoto">
-
-<button onclick="addFood()">Add Food</button>
-
+    <h2>Restaurant Menu</h2>
+    <div class="card">
+        <h3>Add Food</h3>
+        <input type="text" id="foodName" placeholder="Food Name">
+        <input type="number" id="foodPrice" placeholder="Price">
+        <input type="file" id="foodPhoto">
+        <button onclick="addFood()">Add Food</button>
+    </div>
+    <h3>Food List</h3>
+    <div id="foodMenuList" class="cardWrap"></div>
 </div>
-
-<h3>Food List</h3>
-
-<div id="foodMenuList" class="cardWrap"></div>
-
-</div>
-
 
 <!-- ================= DRINKS ================= -->
-
 <div id="drinks" class="page" style="display:none">
-
-<h2>Drinks Menu</h2>
-
-<div class="card">
-
-<h3>Add Drink</h3>
-
-<input type="text" id="drinkName" placeholder="Drink Name">
-
-<input type="number" id="drinkPrice" placeholder="Price">
-
-<input type="file" id="drinkPhoto">
-
-<button onclick="addDrink()">Add Drink</button>
-
+    <h2>Drinks Menu</h2>
+    <div class="card">
+        <h3>Add Drink</h3>
+        <input type="text" id="drinkName" placeholder="Drink Name">
+        <input type="number" id="drinkPrice" placeholder="Price">
+        <input type="file" id="drinkPhoto">
+        <button onclick="addDrink()">Add Drink</button>
+    </div>
+    <h3>Drink List</h3>
+    <div id="drinkMenuList" class="cardWrap"></div>
 </div>
 
-<h3>Drink List</h3>
-
-<div id="drinkMenuList" class="cardWrap"></div>
-
+<!-- ================= BILLING ================= -->
+<div id="billing" class="page" style="display:none">
+    <h2>Guest Billing</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Guest</th>
+                <th>Item</th>
+                <th>Type</th>
+                <th>Price</th>
+                <th>Status</th>
+                <th>Payment Method</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="billingList"></tbody>
+    </table>
 </div>
-
 
 <!-- ================= STAFF ================= -->
-
 <div id="staffPage" class="page" style="display:none">
-
-<h2>Staff Management</h2>
-
-<div class="card">
-
-<h3>Add Staff</h3>
-
-<input type="email" id="staffEmail" placeholder="Staff Email">
-
-<div class="passwordWrapper">
-
-<input type="password" id="staffPassword" placeholder="Password">
-
-<span id="toggleStaffPassword">👁️</span>
-
+    <h2>Staff Management</h2>
+    <div class="card">
+        <h3>Add Staff</h3>
+        <input type="email" id="staffEmail" placeholder="Staff Email">
+        <div class="passwordWrapper">
+            <input type="password" id="staffPassword" placeholder="Password">
+            <span id="toggleStaffPassword">👁️</span>
+        </div>
+        <select id="staffRole">
+            <option value="reception">Reception</option>
+            <option value="kitchen">Kitchen</option>
+            <option value="barman">Barman</option>
+            <option value="worker">Worker</option>
+            <option value="manager">Manager</option>
+        </select>
+        <button onclick="addStaff()">Add Staff</button>
+    </div>
+    <h3>Staff List</h3>
+    <div id="staffList" class="cardWrap"></div>
 </div>
-
-<select id="staffRole">
-
-<option value="reception">Reception</option>
-<option value="kitchen">Kitchen</option>
-<option value="barman">Barman</option>
-<option value="worker">Worker</option>
-<option value="manager">Manager</option>
-
-</select>
-
-<button onclick="addStaff()">Add Staff</button>
-
-</div>
-
-<h3>Staff List</h3>
-
-<div id="staffList" class="cardWrap"></div>
-
-</div>
-
 
 <!-- ================= FINANCE ================= -->
-
 <div id="finance" class="page" style="display:none">
-
-<h2>Hotel Finance Dashboard</h2>
-
-<div class="cardBox">
-
-<div class="statCard totalRevenue">
-<h3>Total Revenue</h3>
-<p id="totalRevenue">0</p>
+    <h2>Hotel Finance Dashboard</h2>
+    <div class="cardBox">
+        <div class="statCard roomRevenue"><h3>Room Revenue</h3><p id="roomRevenue">0</p></div>
+        <div class="statCard foodRevenue"><h3>Food Revenue</h3><p id="foodRevenue">0</p></div>
+        <div class="statCard drinkRevenue"><h3>Drink Revenue</h3><p id="drinkRevenue">0</p></div>
+    </div>
+    <h3>Revenue Chart</h3>
+    <canvas id="revenueChart"></canvas>
 </div>
 
-<div class="statCard roomRevenue">
-<h3>Room Revenue</h3>
-<p id="roomRevenue">0</p>
-</div>
-
-<div class="statCard foodRevenue">
-<h3>Food Revenue</h3>
-<p id="foodRevenue">0</p>
-</div>
-
-<div class="statCard drinkRevenue">
-<h3>Drink Revenue</h3>
-<p id="drinkRevenue">0</p>
-</div>
-
-</div>
-
-<canvas id="revenueChart"></canvas>
-
-</div>
-
-
-</div>
-
-
-<!-- ================= JS ================= -->
-
-<script src="js/dashboard.js"></script>
+<!-- ================= JS MODULES ================= -->
+<script type="module" src="js/dashboard.js"></script>
 <script type="module" src="js/rooms.js"></script>
+<script type="module" src="js/order.js"></script>
+<script type="module" src="js/billing.js"></script>
 <script type="module" src="js/restaurant.js"></script>
 <script type="module" src="js/drinks.js"></script>
 <script type="module" src="js/staff.js"></script>
 <script type="module" src="js/finance.js"></script>
+<script type="module" src="js/roleDashboard.js"></script>
+
+<!-- ================= SCRIPT: SUBMENU + STAFF + DATE ================= -->
+<script>
+const dashboardTitle = document.querySelector(".menuTitle");
+const dashboardSubmenu = document.querySelector(".submenu");
+
+dashboardTitle.addEventListener("click", e => {
+    e.stopPropagation();
+    dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
+});
+
+document.addEventListener("click", () => {
+    dashboardSubmenu.style.display = "none";
+});
+
+// Staff password toggle
+const toggleStaffPassword = document.getElementById("toggleStaffPassword");
+const staffPassword = document.getElementById("staffPassword");
+toggleStaffPassword.addEventListener("click", () => {
+    const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
+    staffPassword.setAttribute("type", type);
+    toggleStaffPassword.textContent = type === "password" ? "👁️" : "🙈";
+});
+
+// Today's date
+document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
+</script>
 
 </body>
-
 </html>
