@@ -1,55 +1,95 @@
-import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { db, storage } from './firebase.js';
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { updateStats } from './dashboard.js';
 
-// Load rooms
-export async function loadRooms() {
-    const roomList = document.getElementById("roomList");
-    roomList.innerHTML = "";
-    const roomsSnap = await getDocs(collection(db, "rooms"));
+const foodNameInput = document.getElementById("foodName");
+const foodPriceInput = document.getElementById("foodPrice");
+const foodPhotoInput = document.getElementById("foodPhoto");
+const foodMenuList = document.getElementById("foodMenuList");
 
-    roomsSnap.forEach(room => {
-        const data = room.data();
+// Add Food Item
+window.addFood = async function() {
+    const name = foodNameInput.value.trim();
+    const price = parseFloat(foodPriceInput.value);
+    const file = foodPhotoInput.files[0];
+
+    if (!name || !price || !file) {
+        alert("Please fill all fields and select a photo.");
+        return;
+    }
+
+    try {
+        const photoRef = ref(storage, `food/${file.name}_${Date.now()}`);
+        await uploadBytes(photoRef, file);
+        const photoURL = await getDownloadURL(photoRef);
+
+        await addDoc(collection(db, "foods"), {
+            name,
+            price,
+            photoURL
+        });
+
+        foodNameInput.value = "";
+        foodPriceInput.value = "";
+        foodPhotoInput.value = "";
+
+        loadFoods();
+        updateStats();
+
+    } catch (err) {
+        console.error(err);
+        alert("Error adding food: " + err.message);
+    }
+};
+
+// Load Food Items
+export async function loadFoods() {
+    foodMenuList.innerHTML = "";
+    const foodsSnapshot = await getDocs(collection(db, "foods"));
+
+    foodsSnapshot.forEach(docSnap => {
+        const food = docSnap.data();
+        const foodId = docSnap.id;
+
         const card = document.createElement("div");
         card.className = "cardItem";
+
         card.innerHTML = `
-            <img src="${data.photo || 'https://via.placeholder.com/180'}" />
-            <h4>Room ${data.number}</h4>
-            <p>${data.type} - $${data.price}</p>
-            <p>Status: ${data.status}</p>
+            <img src="${food.photoURL}" alt="${food.name}">
+            <h4>${food.name}</h4>
+            <p>Price: $${food.price}</p>
+            <button onclick="orderFood('${foodId}', '${food.name}', ${food.price})">
+                Order
+            </button>
         `;
-        // Click to book
-        card.addEventListener("click", async () => {
-            if (data.status === "Occupied") return alert("Room already occupied");
-            await addDoc(collection(db, "billing"), {
-                guest: "Guest", // replace with user
-                type: "room",
-                item: `Room ${data.number}`,
-                price: data.price,
-                status: "Pending",
-                payment: "Cash",
-                date: new Date().toISOString()
-            });
-            await updateDoc(doc(db, "rooms", room.id), { status: "Occupied" });
-            alert(`Room ${data.number} booked!`);
-            loadRooms(); // refresh
+
+        foodMenuList.appendChild(card);
+    });
+}
+
+// Order Food
+window.orderFood = async function(foodId, foodName, price) {
+    const guestName = prompt("Enter Guest Service Name for billing:");
+    if (!guestName) return;
+
+    try {
+        await addDoc(collection(db, "billing"), {
+            guest: guestName,
+            item: foodName,
+            type: "food",
+            price: price,
+            status: "unpaid",
+            paymentMethod: null,
+            date: new Date().toISOString().split('T')[0]
         });
-        roomList.appendChild(card);
-    });
-}
 
-// Add Room function
-export async function addRoom() {
-    const number = document.getElementById("roomNumber").value;
-    const type = document.getElementById("roomType").value;
-    const price = parseFloat(document.getElementById("roomPrice").value);
-    const photo = document.getElementById("roomPhoto").files[0] ? URL.createObjectURL(document.getElementById("roomPhoto").files[0]) : '';
+        alert(`Food "${foodName}" ordered! Billing added for ${guestName}.`);
+        updateStats();
+    } catch (err) {
+        console.error(err);
+        alert("Error ordering food: " + err.message);
+    }
+};
 
-    if (!number || !type || !price) return alert("Fill all fields");
-
-    await addDoc(collection(db, "rooms"), {
-        number, type, price, photo, status: "Available"
-    });
-
-    alert("Room added!");
-    loadRooms();
-}
+document.addEventListener("DOMContentLoaded", loadFoods);
