@@ -1,63 +1,33 @@
-import { db } from "./firebase.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+// Firebase App
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 
-/* ===============================
-LOAD FINANCE DATA
-=============================== */
-window.loadFinance = async function() {
-    try {
-        const billingSnap = await getDocs(collection(db, "billing"));
+// Firebase Authentication
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        let roomRevenue = 0;
-        let foodRevenue = 0;
-        let drinkRevenue = 0;
+// Firestore Database
+import { getFirestore } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-        billingSnap.forEach(docSnap => {
-            const bill = docSnap.data();
-            if(bill.status !== "Paid") return;
+// Firebase Storage (for images)
+import { getStorage } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
-            switch(bill.itemType) {
-                case "room": roomRevenue += bill.price; break;
-                case "food": foodRevenue += bill.price; break;
-                case "drink": drinkRevenue += bill.price; break;
-            }
-        });
 
-        const totalRevenue = roomRevenue + foodRevenue + drinkRevenue;
-
-        // Update cards
-        document.getElementById("totalRevenue").innerText = `$${totalRevenue}`;
-        document.getElementById("roomRevenue").innerText = `$${roomRevenue}`;
-        document.getElementById("foodRevenue").innerText = `$${foodRevenue}`;
-        document.getElementById("drinkRevenue").innerText = `$${drinkRevenue}`;
-
-        // Render chart
-        const ctx = document.getElementById("revenueChart").getContext("2d");
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Room', 'Food', 'Drink'],
-                datasets: [{
-                    label: 'Revenue ($)',
-                    data: [roomRevenue, foodRevenue, drinkRevenue],
-                    backgroundColor: ['#4caf50', '#ff9800', '#2196f3']
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { display: false },
-                    title: { display: true, text: 'Revenue Breakdown' }
-                }
-            }
-        });
-
-    } catch (err) {
-        console.log("Load finance error:", err);
-    }
+// Your Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCO4SKZUedlEG5tROqwMgJ_sDE6rKSEsyo",
+  authDomain: "lelo-international-hotel-hotel.firebaseapp.com",
+  projectId: "lelo-international-hotel-hotel",
+  storageBucket: "lelo-international-hotel-hotel.firebasestorage.app",
+  messagingSenderId: "964251932564",
+  appId: "1:964251932564:web:0ead1b02ebcb4e3f17a181",
+  measurementId: "G-BY39RYMTEE"
 };
 
-/* ===============================
-AUTO LOAD FINANCE
-=============================== */
-loadFinance();
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+
+
+// Services
+export const auth = getAuth(app);
+export const db = getFirestore(app);
+export const storage = getStorage(app);
