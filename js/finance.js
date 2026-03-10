@@ -1,6 +1,6 @@
 // finance.js
 import { db } from "./firebase.js";
-import { collection, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getDocs, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const totalRevenueEl = document.getElementById("totalRevenue");
 const roomRevenueEl = document.getElementById("roomRevenue");
@@ -30,13 +30,12 @@ export async function loadFinance() {
     foodRevenueEl.innerText = `$${foodTotal.toFixed(2)}`;
     drinkRevenueEl.innerText = `$${drinkTotal.toFixed(2)}`;
 
-    // Render Chart
     renderChart(roomTotal, foodTotal, drinkTotal);
 }
 
 // Update finance when a bill is paid
 export async function updateFinance(amount, method) {
-    // This function can be extended to log payment method, date, etc.
+    // Can log method, date etc. in future
     await loadFinance(); // refresh totals
 }
 
