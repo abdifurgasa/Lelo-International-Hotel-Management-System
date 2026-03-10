@@ -1,69 +1,69 @@
-body{
-margin:0;
-font-family:"Times New Roman",serif;
-height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
-background:url("../images/image-bg.jpg") center/cover no-repeat;
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('../images/image-bg.jpg') no-repeat center center fixed;
+    background-size: cover;
 }
 
-.loginBox{
-background:white;
-padding:40px;
-border-radius:10px;
-width:320px;
-text-align:center;
-box-shadow:0 5px 15px rgba(0,0,0,0.3);
+.loginContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
 }
 
-h1{
-margin-bottom:20px;
-color:#0b3d91;
+.loginBox {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 15px rgba(0,0,0,0.2);
+    width: 320px;
+    text-align: center;
 }
 
-input{
-width:100%;
-padding:10px;
-margin:10px 0;
-border-radius:6px;
-border:1px solid #ccc;
+.loginBox h1 {
+    margin-bottom: 20px;
+    color: #e74c3c;
 }
 
-.passwordWrapper{
-position:relative;
+.loginBox input, .loginBox select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
-.passwordWrapper span{
-position:absolute;
-right:10px;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
+.loginBox button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    background: #9b59b6;
+    color: white;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
 }
 
-button{
-width:100%;
-padding:10px;
-background:#1e90ff;
-border:none;
-color:white;
-font-weight:bold;
-border-radius:6px;
-cursor:pointer;
+.loginBox button:hover {
+    background: #8e44ad;
 }
 
-button:hover{
-background:#104e8b;
+.passwordWrapper {
+    position: relative;
 }
 
-select{
-width:100%;
-padding:8px;
-margin-bottom:10px;
+.passwordWrapper span {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
 }
 
-.error{
-color:red;
-margin-top:10px;
+.error {
+    color: red;
+    margin-top: 10px;
+    font-size: 14px;
 }
