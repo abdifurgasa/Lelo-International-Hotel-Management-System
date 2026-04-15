@@ -1,65 +1,29 @@
 import { auth } from "./firebase.js";
-
-import {
-signInWithEmailAndPassword,
-onAuthStateChanged,
-signOut
+import { 
+    signInWithEmailAndPassword 
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-
+// Login button
 const loginBtn = document.getElementById("loginBtn");
+const errorText = document.getElementById("error");
 
-if(loginBtn){
+loginBtn.addEventListener("click", () => {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-loginBtn.onclick = ()=>{
+    errorText.textContent = "";
 
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
+    if (!email || !password) {
+        errorText.textContent = "Please enter email and password";
+        return;
+    }
 
-signInWithEmailAndPassword(auth,email,password)
-.then(()=>{
-
-window.location.href = "dashboard.html";
-
-})
-.catch(e=>{
-alert("Login Failed: " + e.message);
+    signInWithEmailAndPassword(auth, email, password)
+        .then(() => {
+            // success → go to dashboard
+            window.location.href = "dashboard.html";
+        })
+        .catch((error) => {
+            errorText.textContent = error.message;
+        });
 });
-
-};
-
-}
-
-
-/* Auto protection */
-
-onAuthStateChanged(auth,(user)=>{
-
-if(!user){
-
-if(window.location.pathname.includes("dashboard")){
-window.location.href = "index.html";
-}
-
-}
-
-});
-
-
-/* Logout */
-
-const logoutBtn = document.getElementById("logout");
-
-if(logoutBtn){
-
-logoutBtn.onclick=()=>{
-
-signOut(auth).then(()=>{
-
-window.location.href="index.html";
-
-});
-
-};
-
-}
