@@ -1,30 +1,53 @@
-import { auth } from "./firebase.js";
-import { onAuthStateChanged, signOut } from 
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { db } from "./firebase.js";
+import {
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-onAuthStateChanged(auth, (user) => {
-    if (!user) {
-        window.location.href = "login.html";
-    }
-});
+// ADD ROOM
+export async function addRoom() {
+    const roomNumber = document.getElementById("roomNumber").value;
 
-window.logout = function () {
-    signOut(auth).then(() => {
-        window.location.href = "login.html";
+    if (!roomNumber) return alert("Enter room number");
+
+    await addDoc(collection(db, "rooms"), {
+        roomNumber,
+        createdAt: new Date()
     });
-};
-import { loadRooms } from "./rooms.js";
 
-window.addEventListener("load", () => {
+    document.getElementById("roomNumber").value = "";
     loadRooms();
-});
-import { loadOrders } from "./order.js";
+}
 
-window.addEventListener("load", () => {
-    loadOrders();
-});
-import { loadStaff } from "./staff.js";
+// LOAD ROOMS
+export async function loadRooms() {
+    const roomList = document.getElementById("roomList");
+    roomList.innerHTML = "";
 
-window.addEventListener("load", () => {
-    loadStaff();
-});
+    const snapshot = await getDocs(collection(db, "rooms"));
+
+    snapshot.forEach((docItem) => {
+        const data = docItem.data();
+
+        const div = document.createElement("div");
+        div.innerHTML = `
+            Room: ${data.roomNumber}
+            <button onclick="deleteRoom('${docItem.id}')">Delete</button>
+        `;
+
+        roomList.appendChild(div);
+    });
+}
+
+// DELETE ROOM
+export async function deleteRoom(id) {
+    await deleteDoc(doc(db, "rooms", id));
+    loadRooms();
+}
+
+window.addRoom = addRoom;
+window.loadRooms = loadRooms;
+window.deleteRoom = deleteRoom;
