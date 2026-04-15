@@ -13,3 +13,8 @@ window.logout = function () {
         window.location.href = "login.html";
     });
 };
+import { loadRooms } from "./rooms.js";
+
+window.addEventListener("load", () => {
+    loadRooms();
+});
