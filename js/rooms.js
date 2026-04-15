@@ -4,19 +4,29 @@ import {
     addDoc,
     getDocs,
     deleteDoc,
-    doc
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ADD ROOM
+let editingRoomId = null;
+
+// ADD / UPDATE ROOM
 export async function addRoom() {
     const roomNumber = document.getElementById("roomNumber").value;
 
     if (!roomNumber) return alert("Enter room number");
 
-    await addDoc(collection(db, "rooms"), {
-        roomNumber,
-        createdAt: new Date()
-    });
+    if (editingRoomId) {
+        await updateDoc(doc(db, "rooms", editingRoomId), {
+            roomNumber
+        });
+        editingRoomId = null;
+    } else {
+        await addDoc(collection(db, "rooms"), {
+            roomNumber,
+            createdAt: new Date()
+        });
+    }
 
     document.getElementById("roomNumber").value = "";
     loadRooms();
@@ -29,18 +39,25 @@ export async function loadRooms() {
 
     const snapshot = await getDocs(collection(db, "rooms"));
 
-    snapshot.forEach((docItem) => {
-        const data = docItem.data();
+    snapshot.forEach((d) => {
+        const data = d.data();
 
         const div = document.createElement("div");
         div.innerHTML = `
             Room: ${data.roomNumber}
-            <button onclick="deleteRoom('${docItem.id}')">Delete</button>
+            <button onclick="editRoom('${d.id}', '${data.roomNumber}')">Edit</button>
+            <button onclick="deleteRoom('${d.id}')">Delete</button>
         `;
 
         roomList.appendChild(div);
     });
 }
+
+// EDIT ROOM
+window.editRoom = function (id, roomNumber) {
+    document.getElementById("roomNumber").value = roomNumber;
+    editingRoomId = id;
+};
 
 // DELETE ROOM
 export async function deleteRoom(id) {
