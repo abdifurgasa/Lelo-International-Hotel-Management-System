@@ -1,61 +1,53 @@
-// staff.js
 import { db } from "./firebase.js";
-import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import {
+    collection,
+    addDoc,
+    getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const staffListEl = document.getElementById("staffList");
-
-// Add Staff
+// ADD STAFF
 export async function addStaff() {
     const email = document.getElementById("staffEmail").value;
-    const password = document.getElementById("staffPassword").value;
-    const role = document.getElementById("staffRole").value;
+    const role = document.getElementById("staffRole")?.value || "worker";
 
-    if (!email || !password || !role) return alert("Fill all fields");
+    if (!email) {
+        alert("Enter staff email");
+        return;
+    }
 
-    await addDoc(collection(db, "staff"), {
-        email,
-        password,
-        role,
-        fullName: email.split("@")[0] // simple example for full name
-    });
+    try {
+        await addDoc(collection(db, "staff"), {
+            email: email,
+            role: role,
+            createdAt: new Date()
+        });
 
-    alert("Staff added!");
-    loadStaff();
+        document.getElementById("staffEmail").value = "";
+
+        loadStaff();
+
+    } catch (error) {
+        console.error("Error adding staff:", error);
+    }
 }
 
-// Load Staff List
+// LOAD STAFF
 export async function loadStaff() {
-    staffListEl.innerHTML = "";
-    const snapshot = await getDocs(collection(db, "staff"));
-    snapshot.forEach(docSnap => {
-        const staff = docSnap.data();
-        const card = document.createElement("div");
-        card.className = "cardItem";
-        card.innerHTML = `
-            <h4>${staff.fullName}</h4>
-            <p>Email: ${staff.email}</p>
-            <p>Role: ${staff.role}</p>
-            <button onclick="deleteStaff('${docSnap.id}')">Delete</button>
-        `;
-        staffListEl.appendChild(card);
+    const staffList = document.getElementById("staffList");
+    staffList.innerHTML = "";
+
+    const querySnapshot = await getDocs(collection(db, "staff"));
+
+    querySnapshot.forEach((doc) => {
+        const data = doc.data();
+
+        const div = document.createElement("div");
+        div.textContent = `Staff: ${data.email} (${data.role})`;
+
+        staffList.appendChild(div);
     });
 }
 
-// Delete Staff
-export async function deleteStaff(staffId) {
-    const confirmDelete = confirm("Delete this staff?");
-    if (!confirmDelete) return;
-    await deleteDoc(doc(db, "staff", staffId));
-    alert("Staff deleted!");
-    loadStaff();
-}
-
-// Password show/hide toggle
-const toggleStaffPassword = document.getElementById("toggleStaffPassword");
-const staffPassword = document.getElementById("staffPassword");
-
-toggleStaffPassword.addEventListener("click", function() {
-    const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
-    staffPassword.setAttribute("type", type);
-    this.textContent = type === "password" ? "👁️" : "🙈";
-});
+// expose to HTML
+window.addStaff = addStaff;
+window.loadStaff = loadStaff;
