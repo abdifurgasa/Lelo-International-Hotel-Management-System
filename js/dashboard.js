@@ -54,3 +54,18 @@ input {
     border-left: 4px solid #007bff;
     border-radius: 5px;
 }
+import { loadRooms } from "./rooms.js";
+
+window.addEventListener("load", () => {
+    loadRooms();
+});
+import { loadOrders } from "./order.js";
+
+window.addEventListener("load", () => {
+    loadOrders();
+});
+import { loadStaff } from "./staff.js";
+
+window.addEventListener("load", () => {
+    loadStaff();
+});
