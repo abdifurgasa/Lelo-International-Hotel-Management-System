@@ -1,330 +1,56 @@
-/* ===============================
-GLOBAL STYLE
-=============================== */
-
-body{
-margin:0;
-font-family:"Times New Roman",serif;
-background:#f4f6f9;
-color:#333;
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-h1{
-color:#c1121f;
-font-weight:bold;
+/* LAYOUT */
+body {
+    background: #f4f6f9;
 }
 
-h2{
-color:#3a0ca3;
-font-weight:bold;
+/* HEADER */
+h1 {
+    text-align: center;
+    padding: 20px;
 }
 
-h3{
-color:#0f5132;
-font-weight:bold;
+/* BUTTONS */
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-/* ===============================
-SIDEBAR
-=============================== */
-
-.sidebar{
-position:fixed;
-left:0;
-top:0;
-width:240px;
-height:100%;
-background:linear-gradient(180deg,#1b263b,#0d1b2a);
-color:white;
-padding-top:20px;
+button:hover {
+    background: #0056b3;
 }
 
-.sidebar h2{
-text-align:center;
-margin-bottom:30px;
-color:#ffd60a;
-font-weight:bold;
+/* INPUTS */
+input {
+    padding: 8px;
+    margin: 5px;
+    width: 200px;
 }
 
-.sidebar ul{
-list-style:none;
-padding:0;
+/* SECTIONS */
+.page {
+    padding: 20px;
 }
 
-.sidebar ul li{
-padding:12px 20px;
-cursor:pointer;
-font-weight:bold;
-color:#e0e1dd;
-transition:0.3s;
-}
-
-.sidebar ul li:hover{
-background:#415a77;
-}
-
-/* Dashboard title */
-
-.menuTitle{
-color:#ffd60a;
-font-weight:bold;
-}
-
-/* submenu */
-
-.submenu{
-display:none;
-padding-left:20px;
-}
-
-.submenu li{
-color:#e0e1dd;
-}
-
-/* logout */
-
-.logoutBtn{
-background:#e63946;
-color:white;
-text-align:center;
-margin-top:20px;
-}
-
-.logoutBtn:hover{
-background:#b00020;
-}
-
-/* ===============================
-CONTENT
-=============================== */
-
-.content{
-margin-left:260px;
-padding:25px;
-}
-
-/* ===============================
-HOTEL BANNER
-=============================== */
-
-.hotelBanner{
-height:180px;
-background:url("../images/image-bg.jpg") center/cover;
-border-radius:12px;
-display:flex;
-align-items:center;
-justify-content:center;
-text-align:center;
-margin-bottom:30px;
-}
-
-.bannerOverlay{
-background:rgba(0,0,0,0.5);
-width:100%;
-height:100%;
-display:flex;
-flex-direction:column;
-justify-content:center;
-border-radius:12px;
-color:white;
-}
-
-.welcomeTitle{
-font-size:32px;
-font-weight:bold;
-color:#ffd60a;
-}
-
-.todayDate{
-margin-top:6px;
-font-size:14px;
-}
-
-/* ===============================
-STATISTICS CARDS
-=============================== */
-
-.cardBox{
-display:flex;
-flex-wrap:wrap;
-gap:20px;
-margin-top:20px;
-}
-
-.statCard{
-flex:1 1 220px;
-padding:20px;
-border-radius:12px;
-color:white;
-text-align:center;
-font-weight:bold;
-box-shadow:0 6px 15px rgba(0,0,0,0.15);
-transition:0.3s;
-}
-
-.statCard:hover{
-transform:translateY(-5px);
-}
-
-/* card colors */
-
-.totalRooms{
-background:linear-gradient(135deg,#4361ee,#3a0ca3);
-}
-
-.occupiedRooms{
-background:linear-gradient(135deg,#f72585,#b5179e);
-}
-
-.todayOrders{
-background:linear-gradient(135deg,#ff9f1c,#ffbf69);
-color:#333;
-}
-
-.todayRevenue{
-background:linear-gradient(135deg,#06d6a0,#1b9aaa);
-}
-
-/* ===============================
-ROOM / FOOD / DRINK CARDS
-=============================== */
-
-.cardWrap{
-display:flex;
-flex-wrap:wrap;
-gap:20px;
-margin-top:20px;
-}
-
-.cardItem{
-width:210px;
-border-radius:12px;
-overflow:hidden;
-box-shadow:0 6px 15px rgba(0,0,0,0.15);
-background:white;
-cursor:pointer;
-transition:0.3s;
-}
-
-.cardItem:hover{
-transform:translateY(-5px);
-}
-
-.cardItem img{
-width:100%;
-height:130px;
-object-fit:cover;
-}
-
-.cardBody{
-padding:10px;
-text-align:center;
-}
-
-.cardBody h4{
-margin:6px 0;
-font-weight:bold;
-}
-
-.cardBody p{
-margin:3px 0;
-}
-
-/* room status */
-
-.statusAvailable{
-color:#2b9348;
-font-weight:bold;
-}
-
-.statusBooked{
-color:#d00000;
-font-weight:bold;
-}
-
-/* ===============================
-FORMS
-=============================== */
-
-.card{
-background:white;
-padding:20px;
-border-radius:12px;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-width:320px;
-margin-bottom:20px;
-}
-
-input,select{
-width:100%;
-padding:8px;
-margin:6px 0;
-border-radius:6px;
-border:1px solid #ccc;
-}
-
-button{
-padding:8px 14px;
-background:#3a0ca3;
-color:white;
-border:none;
-border-radius:6px;
-cursor:pointer;
-font-weight:bold;
-}
-
-button:hover{
-background:#240046;
-}
-
-/* ===============================
-TABLE
-=============================== */
-
-table{
-width:100%;
-border-collapse:collapse;
-margin-top:20px;
-background:white;
-box-shadow:0 5px 12px rgba(0,0,0,0.1);
-}
-
-table th{
-background:#3a0ca3;
-color:white;
-padding:10px;
-}
-
-table td{
-border:1px solid #ddd;
-padding:8px;
-text-align:center;
-}
-
-/* ===============================
-PASSWORD TOGGLE
-=============================== */
-
-.passwordWrapper{
-position:relative;
-}
-
-.passwordWrapper span{
-position:absolute;
-right:10px;
-top:50%;
-transform:translateY(-50%);
-cursor:pointer;
-}
-
-/* ===============================
-FINANCE CHART
-=============================== */
-
-canvas{
-background:white;
-padding:10px;
-border-radius:10px;
-margin-top:20px;
-box-shadow:0 4px 12px rgba(0,0,0,0.1);
+/* LIST BOX */
+#roomList div,
+#orderList div,
+#staffList div {
+    background: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 4px solid #007bff;
+    border-radius: 5px;
 }
