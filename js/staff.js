@@ -4,21 +4,32 @@ import {
     addDoc,
     getDocs,
     deleteDoc,
-    doc
+    doc,
+    updateDoc
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ADD STAFF
+let editingStaffId = null;
+
+// ADD / UPDATE STAFF
 export async function addStaff() {
     const email = document.getElementById("staffEmail").value;
     const role = document.getElementById("staffRole")?.value || "worker";
 
     if (!email) return alert("Enter email");
 
-    await addDoc(collection(db, "staff"), {
-        email,
-        role,
-        createdAt: new Date()
-    });
+    if (editingStaffId) {
+        await updateDoc(doc(db, "staff", editingStaffId), {
+            email,
+            role
+        });
+        editingStaffId = null;
+    } else {
+        await addDoc(collection(db, "staff"), {
+            email,
+            role,
+            createdAt: new Date()
+        });
+    }
 
     document.getElementById("staffEmail").value = "";
     loadStaff();
@@ -31,18 +42,28 @@ export async function loadStaff() {
 
     const snapshot = await getDocs(collection(db, "staff"));
 
-    snapshot.forEach((docItem) => {
-        const data = docItem.data();
+    snapshot.forEach((d) => {
+        const data = d.data();
 
         const div = document.createElement("div");
         div.innerHTML = `
             ${data.email} (${data.role})
-            <button onclick="deleteStaff('${docItem.id}')">Delete</button>
+            <button onclick="editStaff('${d.id}', '${data.email}', '${data.role}')">Edit</button>
+            <button onclick="deleteStaff('${d.id}')">Delete</button>
         `;
 
         staffList.appendChild(div);
     });
 }
+
+// EDIT STAFF
+window.editStaff = function (id, email, role) {
+    document.getElementById("staffEmail").value = email;
+    if (document.getElementById("staffRole")) {
+        document.getElementById("staffRole").value = role;
+    }
+    editingStaffId = id;
+};
 
 // DELETE STAFF
 export async function deleteStaff(id) {
