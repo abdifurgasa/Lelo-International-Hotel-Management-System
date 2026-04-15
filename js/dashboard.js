@@ -1,53 +1,56 @@
-import { db } from "./firebase.js";
-import {
-    collection,
-    addDoc,
-    getDocs,
-    deleteDoc,
-    doc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-// ADD ROOM
-export async function addRoom() {
-    const roomNumber = document.getElementById("roomNumber").value;
-
-    if (!roomNumber) return alert("Enter room number");
-
-    await addDoc(collection(db, "rooms"), {
-        roomNumber,
-        createdAt: new Date()
-    });
-
-    document.getElementById("roomNumber").value = "";
-    loadRooms();
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-// LOAD ROOMS
-export async function loadRooms() {
-    const roomList = document.getElementById("roomList");
-    roomList.innerHTML = "";
-
-    const snapshot = await getDocs(collection(db, "rooms"));
-
-    snapshot.forEach((docItem) => {
-        const data = docItem.data();
-
-        const div = document.createElement("div");
-        div.innerHTML = `
-            Room: ${data.roomNumber}
-            <button onclick="deleteRoom('${docItem.id}')">Delete</button>
-        `;
-
-        roomList.appendChild(div);
-    });
+/* LAYOUT */
+body {
+    background: #f4f6f9;
 }
 
-// DELETE ROOM
-export async function deleteRoom(id) {
-    await deleteDoc(doc(db, "rooms", id));
-    loadRooms();
+/* HEADER */
+h1 {
+    text-align: center;
+    padding: 20px;
 }
 
-window.addRoom = addRoom;
-window.loadRooms = loadRooms;
-window.deleteRoom = deleteRoom;
+/* BUTTONS */
+button {
+    padding: 8px 12px;
+    margin: 5px;
+    border: none;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0056b3;
+}
+
+/* INPUTS */
+input {
+    padding: 8px;
+    margin: 5px;
+    width: 200px;
+}
+
+/* SECTIONS */
+.page {
+    padding: 20px;
+}
+
+/* LIST BOX */
+#roomList div,
+#orderList div,
+#staffList div {
+    background: white;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 4px solid #007bff;
+    border-radius: 5px;
+}
