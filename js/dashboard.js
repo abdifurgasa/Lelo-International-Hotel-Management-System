@@ -18,3 +18,8 @@ import { loadRooms } from "./rooms.js";
 window.addEventListener("load", () => {
     loadRooms();
 });
+import { loadOrders } from "./order.js";
+
+window.addEventListener("load", () => {
+    loadOrders();
+});
