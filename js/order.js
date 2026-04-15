@@ -1,65 +1,12 @@
-import { db, auth } from "./firebase.js";
+function addOrder() {
+    const item = document.getElementById("orderItem").value;
 
-import {
-collection,
-addDoc,
-getDocs
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    if (!item) return alert("Enter order");
 
+    const div = document.createElement("div");
+    div.textContent = "Order: " + item;
 
-window.addOrder = async function(){
-
-const type = document.getElementById("orderType").value;
-const item = document.getElementById("orderItem").value;
-const price = document.getElementById("orderPrice").value;
-
-const user = auth.currentUser.email;
-
-try{
-
-await addDoc(collection(db,"orders"),{
-
-type:type,
-item:item,
-price:price,
-user:user,
-status:"pending",
-date:new Date()
-
-});
-
-alert("Order Added");
-
-loadOrders();
-
-}catch(error){
-
-alert(error.message);
-
+    document.getElementById("orderList").appendChild(div);
 }
 
-}
-
-
-window.loadOrders = async function(){
-
-const orderList = document.getElementById("orderList");
-orderList.innerHTML="";
-
-const querySnapshot = await getDocs(collection(db,"orders"));
-
-querySnapshot.forEach(doc=>{
-
-const data = doc.data();
-
-orderList.innerHTML += `
-
-<p>
-${data.item} - ${data.price} birr - ${data.type} - ${data.status}
-</p>
-
-`;
-
-});
-
-}
+window.addOrder = addOrder;
