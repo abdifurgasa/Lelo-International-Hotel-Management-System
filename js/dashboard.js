@@ -23,3 +23,8 @@ import { loadOrders } from "./order.js";
 window.addEventListener("load", () => {
     loadOrders();
 });
+import { loadStaff } from "./staff.js";
+
+window.addEventListener("load", () => {
+    loadStaff();
+});
