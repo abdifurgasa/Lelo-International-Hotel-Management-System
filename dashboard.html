@@ -1,235 +1,56 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lelo International Hotel System</title>
+<title>Dashboard</title>
 <link rel="stylesheet" href="css/dashboard.css">
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
-<!-- ================= SIDEBAR ================= -->
-<div class="sidebar">
-    <h2 style="color:red; font-weight:bold;">Lelo International Hotel</h2>
+<h1>Hotel Dashboard</h1>
 
-    <!-- Language Selector -->
-    <select id="langSelect" style="margin-bottom:20px; width:100%; padding:6px;">
-        <option value="en">English</option>
-        <option value="om">Afaan Oromo</option>
-        <option value="am">Amharic</option>
-    </select>
+<button onclick="logout()">Logout</button>
 
-    <ul>
-        <li class="menuItem">
-            <span class="menuTitle" data-i18n="dashboard">Dashboard</span>
-            <ul class="submenu">
-                <li onclick="loadPage('rooms')" data-i18n="rooms">Rooms</li>
-                <li onclick="loadPage('orderPage')" data-i18n="orders">Orders</li>
-                <li onclick="loadPage('billing')" data-i18n="billing">Billing</li>
-                <li onclick="loadPage('restaurant')" data-i18n="restaurant">Restaurant</li>
-                <li onclick="loadPage('drinks')" data-i18n="drinks">Drinks</li>
-                <li onclick="loadPage('staffPage')" data-i18n="staffManagement">Staff Management</li>
-                <li onclick="loadPage('finance')" data-i18n="finance">Finance</li>
-            </ul>
-        </li>
-        <li onclick="logout()" class="logoutBtn" data-i18n="logout">Logout</li>
-    </ul>
+<hr>
+
+<!-- MENU -->
+<button onclick="loadPage('rooms')">Rooms</button>
+<button onclick="loadPage('orders')">Orders</button>
+<button onclick="loadPage('staff')">Staff</button>
+
+<hr>
+
+<!-- ROOMS -->
+<div id="rooms" class="page">
+<h2>Rooms</h2>
+<input id="roomNumber" placeholder="Room Number">
+<button onclick="addRoom()">Add Room</button>
+<div id="roomList"></div>
 </div>
 
-<!-- ================= CONTENT ================= -->
-<div class="content">
-
-    <!-- ================= BANNER ================= -->
-    <div class="hotelBanner">
-        <div class="bannerOverlay">
-            <h1 class="welcomeTitle" data-i18n="welcome">Welcome to Lelo International Hotel System</h1>
-            <p class="bannerSubtitle" data-i18n="welcome">Your comfort is our priority</p>
-            <p class="todayDate" id="todayDate"></p>
-        </div>
-    </div>
-
-    <!-- ================= DASHBOARD STATS ================= -->
-    <div id="dashboard" class="page">
-        <div class="cardBox">
-            <div class="statCard totalRooms">
-                <h3 data-i18n="totalRooms">Total Rooms</h3>
-                <p id="totalRooms">0</p>
-            </div>
-            <div class="statCard occupiedRooms">
-                <h3 data-i18n="occupiedRooms">Occupied Rooms</h3>
-                <p id="occupiedRooms">0</p>
-            </div>
-            <div class="statCard totalFoods">
-                <h3 data-i18n="todayOrders">Today Orders</h3>
-                <p id="totalFoods">0</p>
-            </div>
-            <div class="statCard totalRevenue">
-                <h3 data-i18n="todayRevenue">Today Revenue</h3>
-                <p id="totalRevenue">0</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ================= ROOMS ================= -->
-    <div id="rooms" class="page" style="display:none">
-        <h2 data-i18n="rooms">Rooms</h2>
-        <div class="card">
-            <h3 data-i18n="addRoom">Add Room</h3>
-            <input type="text" id="roomNumber" placeholder="Room Number">
-            <select id="roomType">
-                <option>Single</option>
-                <option>Double</option>
-                <option>Deluxe</option>
-                <option>VIP</option>
-            </select>
-            <input type="number" id="roomPrice" placeholder="Price">
-            <input type="file" id="roomPhoto">
-            <button onclick="addRoom()" data-i18n="addRoom">Add Room</button>
-        </div>
-        <h3 data-i18n="rooms">Available Rooms</h3>
-        <div id="roomList" class="cardWrap"></div>
-    </div>
-
-    <!-- ================= ORDERS ================= -->
-    <div id="orderPage" class="page" style="display:none">
-        <h2 data-i18n="orders">Orders</h2>
-        <select id="orderType">
-            <option value="food" data-i18n="restaurant">Food</option>
-            <option value="drink" data-i18n="drinks">Drink</option>
-        </select>
-        <input type="text" id="orderItem" placeholder="Item name">
-        <input type="number" id="orderPrice" placeholder="Price">
-        <button onclick="addOrder()" data-i18n="pay">Add Order</button>
-        <h3 data-i18n="orders">Order List</h3>
-        <div id="foodOrders"></div>
-        <div id="drinkOrders"></div>
-    </div>
-
-    <!-- ================= RESTAURANT ================= -->
-    <div id="restaurant" class="page" style="display:none">
-        <h2 data-i18n="restaurant">Restaurant Menu</h2>
-        <div class="card">
-            <h3 data-i18n="addFood">Add Food Item</h3>
-            <input type="text" id="foodName" placeholder="Food Name">
-            <input type="number" id="foodPrice" placeholder="Price">
-            <input type="file" id="foodPhoto">
-            <button onclick="addFood()" data-i18n="addFood">Add Food</button>
-        </div>
-        <h3 data-i18n="restaurant">Food List</h3>
-        <div id="foodMenuList" class="cardWrap"></div>
-    </div>
-
-    <!-- ================= DRINKS ================= -->
-    <div id="drinks" class="page" style="display:none">
-        <h2 data-i18n="drinks">Drinks Menu</h2>
-        <div class="card">
-            <h3 data-i18n="addDrink">Add Drink</h3>
-            <input type="text" id="drinkName" placeholder="Drink Name">
-            <input type="number" id="drinkPrice" placeholder="Price">
-            <input type="file" id="drinkPhoto">
-            <button onclick="addDrink()" data-i18n="addDrink">Add Drink</button>
-        </div>
-        <h3 data-i18n="drinks">Drink List</h3>
-        <div id="drinkMenuList" class="cardWrap"></div>
-    </div>
-
-    <!-- ================= BILLING ================= -->
-    <div id="billing" class="page" style="display:none">
-        <h2 data-i18n="billing">Billing</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Guest</th>
-                    <th data-i18n="type">Type</th>
-                    <th data-i18n="price">Price</th>
-                    <th data-i18n="status">Status</th>
-                    <th data-i18n="pay">Payment Method</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody id="billingList"></tbody>
-        </table>
-    </div>
-
-    <!-- ================= STAFF ================= -->
-    <div id="staffPage" class="page" style="display:none">
-        <h2 data-i18n="staffManagement">Staff Management</h2>
-        <div class="card">
-            <h3 data-i18n="addStaff">Add Staff</h3>
-            <input type="email" id="staffEmail" placeholder="Staff Email">
-            <div class="passwordWrapper">
-                <input type="password" id="staffPassword" placeholder="Password">
-                <span id="toggleStaffPassword">👁️</span>
-            </div>
-            <select id="staffRole">
-                <option value="reception">Reception</option>
-                <option value="kitchen">Kitchen</option>
-                <option value="barman">Barman</option>
-                <option value="worker">Worker</option>
-                <option value="manager">Manager</option>
-            </select>
-            <button onclick="addStaff()" data-i18n="addStaff">Add Staff</button>
-        </div>
-        <h3 data-i18n="staffManagement">Staff List</h3>
-        <div id="staffList" class="cardWrap"></div>
-    </div>
-
-    <!-- ================= FINANCE ================= -->
-    <div id="finance" class="page" style="display:none">
-        <h2 data-i18n="finance">Finance Dashboard</h2>
-        <div class="cardBox">
-            <div class="statCard totalRevenue">
-                <h3 data-i18n="todayRevenue">Today Revenue</h3>
-                <p id="totalRevenue">0</p>
-            </div>
-        </div>
-        <h3>Revenue Chart</h3>
-        <canvas id="revenueChart"></canvas>
-    </div>
-
+<!-- ORDERS -->
+<div id="orders" class="page" style="display:none">
+<h2>Orders</h2>
+<input id="orderItem" placeholder="Item">
+<button onclick="addOrder()">Add Order</button>
+<div id="orderList"></div>
 </div>
 
-<!-- ================= JS MODULES ================= -->
+<!-- STAFF -->
+<div id="staff" class="page" style="display:none">
+<h2>Staff</h2>
+<input id="staffEmail" placeholder="Email">
+<button onclick="addStaff()">Add Staff</button>
+<div id="staffList"></div>
+</div>
+
+<!-- SCRIPTS -->
+<script type="module" src="js/global.js"></script>
+<script type="module" src="js/firebase.js"></script>
+<script type="module" src="js/auth.js"></script>
 <script type="module" src="js/dashboard.js"></script>
 <script type="module" src="js/rooms.js"></script>
 <script type="module" src="js/order.js"></script>
-<script type="module" src="js/billing.js"></script>
-<script type="module" src="js/restaurant.js"></script>
-<script type="module" src="js/drinks.js"></script>
 <script type="module" src="js/staff.js"></script>
-<script type="module" src="js/finance.js"></script>
-<script type="module" src="js/roleDashboard.js"></script>
-<script type="module" src="js/i18n.js"></script>
 
-<!-- ================= EXTRA JS ================= -->
-<script>
-    // Collapsible submenu
-    const dashboardTitle = document.querySelector(".menuTitle");
-    const dashboardSubmenu = document.querySelector(".submenu");
-
-    dashboardTitle.addEventListener("click", function(e){
-        e.stopPropagation();
-        dashboardSubmenu.style.display = dashboardSubmenu.style.display === "block" ? "none" : "block";
-    });
-
-    document.addEventListener("click", function(){
-        dashboardSubmenu.style.display = "none";
-    });
-
-    // Staff password toggle
-    const toggleStaffPassword = document.getElementById("toggleStaffPassword");
-    const staffPassword = document.getElementById("staffPassword");
-    toggleStaffPassword.addEventListener("click", function(){
-        const type = staffPassword.getAttribute("type") === "password" ? "text" : "password";
-        staffPassword.setAttribute("type", type);
-        this.textContent = type === "password" ? "👁️" : "🙈";
-    });
-
-    // Today's date
-    document.getElementById("todayDate").innerText = new Date().toLocaleDateString();
-
-</script>
 </body>
 </html>
