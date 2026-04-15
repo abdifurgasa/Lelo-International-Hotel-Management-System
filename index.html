@@ -1,79 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Lelo International Hotel</title>
-
-<style>
-
-body{
-margin:0;
-height:100vh;
-display:flex;
-align-items:center;
-justify-content:center;
-font-family:"Times New Roman",serif;
-background:url("images/login-bg.jpg") center/cover no-repeat;
-color:white;
-text-align:center;
-}
-
-.loader{
-border:6px solid #f3f3f3;
-border-top:6px solid #ffd60a;
-border-radius:50%;
-width:50px;
-height:50px;
-animation:spin 1s linear infinite;
-margin:auto;
-margin-top:20px;
-}
-
-@keyframes spin{
-0%{transform:rotate(0deg);}
-100%{transform:rotate(360deg);}
-}
-
-</style>
-
+<title>Loading...</title>
 </head>
 
-<body>
+<body style="text-align:center; margin-top:100px; font-family:Arial;">
 
-<div>
-
-<h1>Lelo International Hotel System</h1>
-
-<p>Loading system...</p>
-
-<div class="loader"></div>
-
-</div>
-
+<h2>Lelo Hotel System</h2>
+<p>Loading...</p>
 
 <script type="module">
-
 import { auth } from "./js/firebase.js";
-import { onAuthStateChanged } from
+import { onAuthStateChanged } from 
 "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-onAuthStateChanged(auth,(user)=>{
-
-if(user){
-
-window.location.href="dashboard.html";
-
-}else{
-
-window.location.href="login.html";
-
-}
-
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        window.location.href = "dashboard.html";
+    } else {
+        window.location.href = "login.html";
+    }
 });
-
 </script>
 
 </body>
